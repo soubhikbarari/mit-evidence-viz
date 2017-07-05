@@ -147,10 +147,11 @@ function formatCsvData(data) {
                 for (var d=0; d < data.length; d++ ){
                     if (data[d][rows[r]] >= 1 && data[d][cols[c]] >= 1){
                         cell.studies.push( { 
-                            "studyname" : d.studyname,
-                            "authors" : d.authors,
-                            "journal" : d.journal,
-                            "quality_score" : d.quality_score
+                            "studyname" : data[d].studyname,
+                            "authors" : data[d].authors,
+                            "journal" : data[d].journal,
+                            "year" : data[d].year,
+                            "quality_score" : data[d].quality_score
                         });
                         cell.N += 1;
                     }
@@ -178,8 +179,22 @@ function initTable(){
 
         var tip = d3.tip()
                     .attr("class", "d3-tip")
-                    .offset([-8, 0])
-                    .html(function(d) { return "<b>"+d.N+"</b>"+ " studies<br>"; });
+                    .offset([-8, -55])
+                    // .html(function(d) { return "<b>"+d.N+"</b>"+ " studies<br>"; });
+                    .html(function(d) { 
+                        if (d.N == 1) {
+                            var html = "<h5><b>"+d.N+"</b>"+ " study<br></h5>";
+                        } else {
+                            var html = "<h5><b>"+d.N+"</b>"+ " studies<br></h5>";
+                        }
+
+                        for (var i=0; i < d.studies.length; i++) {
+                            html += d.studies[i].authors + " (" + d.studies[i].year + ")<br><br>";
+                            console.log(d.studies[i].authors);
+                        }
+
+                        return html;
+                    });
 
         svgs.call(tip);
 
@@ -189,8 +204,18 @@ function initTable(){
             .attr("r", function(d){ 
                 return d.N == 0 ? 0 : d.N+5;
             })
-            .on('mouseover', tip.show)
-            .on('mouseout', tip.hide)
+            .on('mouseover', function(d){
+                tip.show(d);
+                d3.select(this)
+                   .transition()
+                   .attr("fill", "black");
+            })
+            .on('mouseout', function(d){
+                tip.hide(d);
+                d3.select(this)
+                   .transition()
+                   .attr("fill", "grey");
+            })
             .transition()
             .attr("r", function(d){
                 if (d.N == 0) {
@@ -200,6 +225,7 @@ function initTable(){
             })
             .attr("cx", "50%")
             .attr("cy", "50%")
+            .attr("fill", "grey")
             .attr("id", function(d){
                 return d.id;
             })
