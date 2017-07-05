@@ -1,0 +1,433 @@
+
+<html>
+<head>
+  
+<script src="js/lib/d3-v4.min.js"></script>
+<script src="js/lib/jquery-3.2.1.slim.min.js"></script>
+<script src="js/lib/tether-1.4.0.min.js"></script>
+
+<script src="js/lib/bootstrap-4.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.v4.min.css">
+
+<script src="js/viz.js"></script>
+
+  <style>
+  
+  th {
+      font-size: 8pt;
+  }
+  
+  .th_sub {
+      font-size: 7pt;
+  }
+
+  .form-group {
+    font-size: 9pt;
+  }
+
+  </style>
+
+</head>
+
+<body>
+
+
+  <div class="container-fluid">
+    <br>
+    <h2>Evidence gap map for within-government accountability</h2>
+
+    <p>Create a filter based on different study criteria. Hover over resulting cells in table below to view details.</p>
+    
+    <hr>
+
+
+    <div class="container">
+      
+
+      <form class="" id="updateForm" onsubmit="return updateTable();">
+      
+            <div class="form-group row">
+                <div class="form-group col-3">
+                <label class="mr-sm-2" for="region"><b>Region</b></label>
+                <select class="custom-select mb-3 mr-sm-3 mb-sm-1" id="region">
+                  <option selected>All</option>
+                </select>
+            </div>
+            <div class="form-group col-3">
+                <label class="mr-sm-2" for="region"><b>Country</b></label>
+                <select class="custom-select mb-3 mr-sm-3 mb-sm-1" id="country">
+                  <option selected>All</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col col-4">
+                <div class="form-group">
+                    <div class="row">
+                        <label><b>Delivery mode</b></label><br>
+                    </div>
+
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios1" value="0" checked>
+                                All
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="2">
+                                Trainings
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="3">
+                                Media campaign
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="4">
+                                Pamphlets or letters
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="5">
+                                Other
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="6">
+                                FOIA Law
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-4">
+                <div class="form-group">
+                    <div class="row">
+                        <label><b>Sector</b></label><br>
+                    </div>
+
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios1" value="0" checked>
+                                All
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios2" value="2">
+                                Education
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios3" value="3">
+                                Health
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios4" value="4">
+                                Entitlements
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios5" value="5">
+                                Other
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col col-4">
+                <div class="form-group">
+                    <div class="row">
+                        <label><b>What research methodology was employed?</b></label><br>
+                    </div>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios1" value="0" checked>
+                            All
+                      </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="1">
+                                Experimental
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="2">
+                                Quasi experimental (SOO)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="3">
+                                Quasi experimental (FE)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="4">
+                                Quasi experimental (DiD)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="5">
+                                Quasi experimental (RDD)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="6">
+                                Quasi experimental (IV)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="7">
+                                Correlational
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="8">
+                                Qualitative case study
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-4">
+                <div class="form-group">
+                    <div class="row">
+                        <label><b>What level of government is addressed?</b></label><br>
+                    </div>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="0" checked>
+                            All
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="1">
+                            National
+                      </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios2" value="2">
+                                Intermediate (state, provincial, etc.)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios3" value="3">
+                                Local
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-4">
+                <div class="form-group">
+                    <div class="row">
+                        <label><b>Is the setting urban, rural, or peri-urban?</b></label><br>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="0" checked>
+                                All
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="1">
+                                Urban
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios2" value="2">
+                                Rural
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios3" value="3">
+                                Peri-ruban
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+
+
+
+
+
+        <div class="form-group row">
+            <button type="submit" class="btn btn-info" id="updateButton">Update table</button>
+        </div>
+      </form>
+    
+
+
+    </div>
+    
+    <div class="container-fluid">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th colspan=2></th>
+                <th colspan=2>
+                    Ability to hold<br>
+                    government providers<br>
+                    to account</th>
+                <th colspan=2>
+                    Effort to hold<br> 
+                    government providers<br>
+                    to account
+                </th>
+                <th colspan=2>Accountability of government providers</th>
+                <th colspan=2>Government performance</th>
+            </tr>
+            <tr>
+                <th colspan=2></th>
+                <th class="th_sub" id="know_monitor">Accountability actors'<br> knowledge of how to<br> monitor agents</th>
+                <th class="th_sub" id="know_sanction">Accountability actors'<br> knowledge of how to<br> sanction agents</th>
+                <th class="th_sub" id="effort_to_monitor">Accountability actors'  monitoring of  agents</th>
+                <th class="th_sub" id="effort_to_sanction">Accountability actors' sanctioning of  agents</th>
+                <th class="th_sub" id="provider_effort">Providers' level of effort</th>
+                <th class="th_sub" id="provider_corruption">Providers' level of corruption</th>
+                <th class="th_sub" id="outputs">Outputs</th>
+                <th class="th_sub" id="outcomes">Outcomes / Citizen welfare</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr  id="aa_avenues_of_redress">
+                <th scope="row" rowspan=2>
+                    Ability to<br>
+                    monitor<br>
+                    and sanction
+                </th>
+                <th scope="row" class="th_sub">
+                    Citizens'<br>
+                    avenues<br>
+                    of redress
+                </th>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+            </tr>
+            <tr  id="providers_duties">
+                <th scope="row" class="th_sub">
+                    Service<br>
+                    providers'<br>
+                    duties and <br>
+                    obligations
+                </th>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+            </tr>
+            <tr  id="provider_inputs">
+                <th scope="row" rowspan=3>
+                    Costs of<br>
+                    monitoring/<br>
+                    sanctioning
+                </th>
+                <th scope="row" rowspan=1  class="th_sub">
+                    Inputs<br> 
+                    available to<br>
+                    service<br>
+                    providers
+                </th>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+            </tr>
+            <tr  id="provider_effortcorr">
+                <th scope="row" rowspan=1  class="th_sub">Service providers' level of effort</th>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+            </tr>
+            <tr  id="provider_outputs">
+                <th scope="row" rowspan=1  class="th_sub">
+                    Outputs/<br>
+                    outcomes<br> 
+                    produced by service providers
+                </th>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+            </tr>
+            <tr  id="aa_duties">
+                <th scope="row" rowspan=1>
+                    Motivation<br>
+                    to<br> 
+                    monitor/<br>
+                    sanction
+                </th>
+                <th scope="row" rowspan=1  class="th_sub">Citizens' civic duties</th>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+  </div>
+
+</body>
+</html>
