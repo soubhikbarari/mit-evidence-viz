@@ -35,10 +35,30 @@ var filters = [
 
 $(document).ready(function() {
 
+    initButtons();
     initFilters();
     initTable();
+    initToolTips();
 
 });
+
+function initButtons() {
+    $('#showFormBtn').click(function() {
+        if (document.getElementById("showFormBtn").innerHTML == "Show filter menu"){
+            $("#showFormBtn").text('Hide filter menu');
+        } else {
+            $("#showFormBtn").text('Show filter menu');
+        }
+        
+    });
+
+}
+
+function initToolTips(){
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+}
 
 function initFilters() {
 
@@ -146,19 +166,31 @@ function formatCsvData(data) {
 function initTable(){
     d3.select("body").selectAll("svg").remove();
 
+
     d3.csv(CSV_FILE_LOC, function(data){
         init_data = formatCsvData( data );
 
-        d3.select("body")
+        var svgs = d3.select("body")
             .selectAll("td")
             .append("svg")
             .attr("width", "90%")
             .attr("height", "40%")
-            .data(init_data)
+
+        var tip = d3.tip()
+                    .attr("class", "d3-tip")
+                    .offset([-8, 0])
+                    .html(function(d) { return "<b>"+d.N+"</b>"+ " studies<br>"; });
+
+        svgs.call(tip);
+
+        svgs.data(init_data)
             .append("circle")
+            .attr("class", "summaryCircle")
             .attr("r", function(d){ 
                 return d.N == 0 ? 0 : d.N+5;
             })
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide)
             .transition()
             .attr("r", function(d){
                 if (d.N == 0) {
@@ -170,7 +202,7 @@ function initTable(){
             .attr("cy", "50%")
             .attr("id", function(d){
                 return d.id;
-            });
+            })
 
 
     });
