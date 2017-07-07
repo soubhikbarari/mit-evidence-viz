@@ -277,6 +277,15 @@
             <div class="form-group row">
                 <button type="submit" class="btn btn-info" id="updateButton">Update table</button>
             </div>
+
+            <div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorContainer">
+              <button type="button" class="close" onclick="$('.alert').hide(1000)" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <div id="errorText"></div>
+            </div>
+
+
         </form>
     
     </div>
@@ -440,8 +449,11 @@
             </tr>
         </tbody>
     </table>
+    <div id="numStudies" class="text-secondary"><h6></h6></div>
+    <br>
     </div>
   </div>
+
 
 </body>
 </html>

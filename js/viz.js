@@ -32,6 +32,13 @@ var filters = [
     "government_level"
 ];
 
+var filterNames = [
+    "delivery mode",
+    "sector",
+    "setting",
+    "methodology",
+    "government level"
+]
 
 $(document).ready(function() {
 
@@ -43,6 +50,7 @@ $(document).ready(function() {
 });
 
 function initButtons() {
+    $(".alert").hide();
     $('#showFormBtn').click(function() {
         if (document.getElementById("showFormBtn").innerHTML == "Show filter menu"){
             $("#showFormBtn").text('Hide filter menu');
@@ -87,8 +95,7 @@ function initFilters() {
     });
 }
 
-function filterCsvData(data) {
-
+function collectUserFilters() {
     // collect user inputs
     var filter_vals = [];
     for (var i=0; i < filters.length; i++){
@@ -102,10 +109,23 @@ function filterCsvData(data) {
         }
         filter_vals.push(input_vals);
     }
+    return filter_vals;
+}
 
+function filterCsvData(data) {
+
+    // collect user inputs
+    var filter_vals = collectUserFilters();
     var selected_country = document.getElementById("country").querySelector("option:checked").text;
-    var selected_region = document.getElementById("country").querySelector("option:checked").text;
+    var selected_region = document.getElementById("region").querySelector("option:checked").text;
 
+    if (selected_country != "All") {
+        var loc_filter = "country";
+        var loc_value = selected_country;
+    } else if (selected_region != "All") {
+        var loc_filter = "region";
+        var loc_value = selected_region;
+    }
     // apply user inputs
     var flt_data = data.filter(function(d){
 
@@ -124,10 +144,10 @@ function filterCsvData(data) {
             }
         }
 
-        if (selected_country != "All"){
-            return (d.country == selected_country);
-        } else if (selected_region != "All"){
-            return (d.region == selected_region);
+        if (!(selected_country == "All" &&  selected_region == "All" )) { 
+            if ( d[loc_filter] != loc_value ) {
+                return false;
+            }
         }
 
         return true;
@@ -230,6 +250,9 @@ function initTable(){
                 return d.id;
             })
 
+        var N = init_data.reduce(function(a, b) { return a + b.N; }, 0);
+
+        d3.select("#numStudies").html("<b>" + N + "</b> total studies.");
 
     });
 
@@ -239,8 +262,32 @@ function initTable(){
 
 function updateTable() {
 
-    // TODO: need to update filters to be resolved based on selected ...
-    //       also need to create error message if bad set of filters chosen
+    // check for errors
+    var error_text = "";
+
+    //// mixed up location  filter
+    var selected_country = document.getElementById("country").querySelector("option:checked").text;
+    var selected_region = document.getElementById("region").querySelector("option:checked").text;
+    if (selected_country != "All" && selected_region != "All" ) {
+        error_text += "Please select EITHER <strong>region</strong> filter OR <strong>country</strong> filter.<br>"
+    }
+
+    //// incomplete filters
+    var filter_vals = collectUserFilters();
+    for (var i=0; i < filters.length; i++){
+        if (filter_vals[i].length == 0) {
+            error_text += "Please select an appropriate filter for <strong>"+filterNames[i]+"</strong>.<br>";
+        }
+    }
+
+    if (error_text.length > 0) {
+        d3.select("#errorText").html(error_text);
+        $('.alert').hide().show();
+        return false;
+    }
+
+    d3.select("#errorText").html("");
+    $('.alert').hide();
 
     d3.csv(CSV_FILE_LOC, function(data){
 
@@ -254,10 +301,13 @@ function updateTable() {
                 return d.N == 0 ? 0 : d.N+5;
             });
 
+        var N = new_data.reduce(function(a, b) { return a + b.N; }, 0);
+
+        d3.select("#numStudies").html("<b>" + N + "</b> total studies.");
+
+
     });
     
-    
-
     
     return false;
 
