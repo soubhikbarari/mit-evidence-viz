@@ -252,8 +252,11 @@ function initTable(){
 
         var N = init_data.reduce(function(a, b) { return a + b.N; }, 0);
 
-        d3.select("#numStudies").html("<b>" + N + "</b> total studies.");
-
+        if (N == 1) {
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> total study.</h5>");  
+        } else {
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> total studies.</h5>");  
+        }
     });
 
     return true;
@@ -303,7 +306,11 @@ function updateTable() {
 
         var N = new_data.reduce(function(a, b) { return a + b.N; }, 0);
 
-        d3.select("#numStudies").html("<b>" + N + "</b> total studies.");
+        if (N == 1) {
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> total study.</h5>");  
+        } else {
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> total studies.</h5>");  
+        }
 
 
     });
