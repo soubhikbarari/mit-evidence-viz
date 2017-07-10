@@ -27,17 +27,21 @@ var rows = [
 var filters = [
     "delivery_mode",
     "sector",
-    "setting",
     "methodology",
-    "government_level"
+    "government_level",
+    "setting",
+    "principal",
+    "agent"
 ];
 
 var filterNames = [
     "delivery mode",
     "sector",
-    "setting",
     "methodology",
-    "government level"
+    "government level",
+    "setting",
+    "principal",
+    "agent"
 ]
 
 $(document).ready(function() {
@@ -119,10 +123,10 @@ function filterCsvData(data) {
     var selected_country = document.getElementById("country").querySelector("option:checked").text;
     var selected_region = document.getElementById("region").querySelector("option:checked").text;
 
-    if (selected_country != "All") {
+    if (selected_country != "Any") {
         var loc_filter = "country";
         var loc_value = selected_country;
-    } else if (selected_region != "All") {
+    } else if (selected_region != "Any") {
         var loc_filter = "region";
         var loc_value = selected_region;
     }
@@ -144,7 +148,7 @@ function filterCsvData(data) {
             }
         }
 
-        if (!(selected_country == "All" &&  selected_region == "All" )) { 
+        if (!(selected_country == "Any" &&  selected_region == "Any" )) { 
             if ( d[loc_filter] != loc_value ) {
                 return false;
             }
@@ -249,13 +253,22 @@ function initTable(){
             .attr("id", function(d){
                 return d.id;
             })
-
-        var N = init_data.reduce(function(a, b) { return a + b.N; }, 0);
+        
+        var N = 0;
+        var uniq_studies = [];
+        for (i = 0; i < init_data.length; i++) {
+            for (j = 0; j < init_data[i].N; j++) {
+                if (uniq_studies.indexOf(init_data[i].studies[j].studyname) == -1){
+                    uniq_studies.push(init_data[i].studies[j].studyname);
+                }
+            }
+        }
+        N = uniq_studies.length;
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> total study.</h5>");  
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique study.</h5>");  
         } else {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> total studies.</h5>");  
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique studies.</h5>");  
         }
     });
 
@@ -271,7 +284,7 @@ function updateTable() {
     //// mixed up location  filter
     var selected_country = document.getElementById("country").querySelector("option:checked").text;
     var selected_region = document.getElementById("region").querySelector("option:checked").text;
-    if (selected_country != "All" && selected_region != "All" ) {
+    if (selected_country != "Any" && selected_region != "Any" ) {
         error_text += "Please select EITHER <strong>region</strong> filter OR <strong>country</strong> filter.<br>"
     }
 
@@ -304,12 +317,21 @@ function updateTable() {
                 return d.N == 0 ? 0 : d.N+5;
             });
 
-        var N = new_data.reduce(function(a, b) { return a + b.N; }, 0);
+        var N = 0;
+        var uniq_studies = [];
+        for (i = 0; i < new_data.length; i++) {
+            for (j = 0; j < new_data[i].N; j++) {
+                if (uniq_studies.indexOf(new_data[i].studies[j].studyname) == -1){
+                    uniq_studies.push(new_data[i].studies[j].studyname);
+                }
+            }
+        }
+        N = uniq_studies.length;
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> total study.</h5>");  
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique study.</h5>");  
         } else {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> total studies.</h5>");  
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique studies.</h5>");  
         }
 
 
