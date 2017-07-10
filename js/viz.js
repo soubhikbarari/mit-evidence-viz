@@ -232,13 +232,13 @@ function initTable(){
                 tip.show(d);
                 d3.select(this)
                    .transition()
-                   .attr("fill", "black");
+                   .attr("fill", "red");
             })
             .on('mouseout', function(d){
                 tip.hide(d);
                 d3.select(this)
                    .transition()
-                   .attr("fill", "grey");
+                   .attr("fill", "black");
             })
             .transition()
             .attr("r", function(d){
@@ -249,7 +249,7 @@ function initTable(){
             })
             .attr("cx", "50%")
             .attr("cy", "50%")
-            .attr("fill", "grey")
+            .attr("fill", "black")
             .attr("id", function(d){
                 return d.id;
             })
@@ -266,9 +266,9 @@ function initTable(){
         N = uniq_studies.length;
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique study.</h5>");  
+            d3.select("#numStudies").html("<h6><b>" + N + "</b> unique study:</h6>");  
         } else {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique studies.</h5>");  
+            d3.select("#numStudies").html("<h6><b>" + N + "</b> unique studies:</h6>");  
         }
     });
 
@@ -329,9 +329,9 @@ function updateTable() {
         N = uniq_studies.length;
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique study.</h5>");  
+            d3.select("#numStudies").html("<h6><b>" + N + "</b> unique study:</h6>");  
         } else {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique studies.</h5>");  
+            d3.select("#numStudies").html("<h6><b>" + N + "</b> unique studies:</h6>");  
         }
 
 
