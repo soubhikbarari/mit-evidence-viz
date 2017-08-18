@@ -1,7 +1,7 @@
 
 
 
-var CSV_FILE_LOC = "./data/TAI_data1.csv";
+var CSV_FILE_LOC = "./data/TAI_data2.csv";
 
 var cols = [
     "know_monitor",
