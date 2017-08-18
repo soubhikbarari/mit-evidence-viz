@@ -135,17 +135,29 @@ function filterCsvData(data) {
 
         for (var i=0; i < filters.length; i++){
             var filter = filters[i];
-            var d_val = parseInt(d[filter]);
+            var d_vals = d[filter].split(";");
+
             if (filter_vals[i].indexOf(0) != -1) {
                 // if user selected the '0' option ('All'), then
                 // include this row.
                 continue;
             }
-            if (filter_vals[i].indexOf(d_val) === -1){
-                // if the value for `filter` for this row does not 
-                // exist in the user's inputs, then throw the row out.
+
+            var any_vals = false;
+            for (var j=0, len=d_vals.length; j<len; j++){
+                var d_val = parseInt(d_vals[j], 10);
+
+                if (filter_vals[i].indexOf(d_val) != -1){
+                    // check if the user specified any 
+                    // value present for this category
+                    any_vals = true;
+                }    
+            }
+
+            if (any_vals == false) {
                 return false;
             }
+
         }
 
         if (!(selected_country == "Any" &&  selected_region == "Any" )) { 
@@ -157,7 +169,7 @@ function filterCsvData(data) {
         return true;
 
     })
-
+    
     return flt_data;
 }
 
@@ -214,7 +226,6 @@ function initTable(){
 
                         for (var i=0; i < d.studies.length; i++) {
                             html += d.studies[i].authors + " (" + d.studies[i].year + ")<br><br>";
-                            console.log(d.studies[i].authors);
                         }
 
                         return html;
@@ -256,14 +267,14 @@ function initTable(){
         
         var N = 0;
         var uniq_studies = [];
-        for (i = 0; i < init_data.length; i++) {
-            for (j = 0; j < init_data[i].N; j++) {
-                if (uniq_studies.indexOf(init_data[i].studies[j].studyname) == -1){
-                    uniq_studies.push(init_data[i].studies[j].studyname);
-                }
+        for (s = 0; s < data.length; s++) {
+            if (uniq_studies.indexOf(data[s].studyname) == -1){
+                uniq_studies.push(data[s].studyname);
             }
         }
+
         N = uniq_studies.length;
+        console.log(uniq_studies);
 
         if (N == 1) {
             d3.select("#numStudies").html("<h6><b>" + N + "</b> unique study:</h6>");  
@@ -306,8 +317,9 @@ function updateTable() {
     $('.alert').hide();
 
     d3.csv(CSV_FILE_LOC, function(data){
+        flt_data = filterCsvData(data);
+        new_data = formatCsvData(flt_data);
 
-        new_data = formatCsvData( filterCsvData(data) );
         
         d3.select("body")
             .selectAll("circle")
@@ -319,13 +331,12 @@ function updateTable() {
 
         var N = 0;
         var uniq_studies = [];
-        for (i = 0; i < new_data.length; i++) {
-            for (j = 0; j < new_data[i].N; j++) {
-                if (uniq_studies.indexOf(new_data[i].studies[j].studyname) == -1){
-                    uniq_studies.push(new_data[i].studies[j].studyname);
-                }
+        for (s = 0; s < flt_data.length; s++) {
+            if (uniq_studies.indexOf(flt_data[s].studyname) == -1){
+                uniq_studies.push(flt_data[s].studyname);
             }
         }
+
         N = uniq_studies.length;
 
         if (N == 1) {
@@ -333,6 +344,8 @@ function updateTable() {
         } else {
             d3.select("#numStudies").html("<h6><b>" + N + "</b> unique studies:</h6>");  
         }
+        
+        console.log(uniq_studies);
 
 
     });
