@@ -15,9 +15,9 @@ th {
   line-height: 1;
   font-size: 8pt;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   color: #fff;
-  border-radius: 2px;
+  border-radius: 5px;
 }
 
 .d3-tip h5 {
@@ -40,7 +40,7 @@ th {
 
 /* Style northward tooltips differently */
 .d3-tip.n:after {
-  top: 99%;
-  left: 50;
+  top: 100%;
+  left: 55;
 }
 

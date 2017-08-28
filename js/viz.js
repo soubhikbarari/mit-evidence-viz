@@ -1,7 +1,7 @@
 
 
 
-var CSV_FILE_LOC = "./data/TAI_data2.csv";
+var CSV_FILE_LOC = "./data/GOVLAB_transparency_lit_review.csv";
 
 var cols = [
     "know_monitor",
@@ -87,14 +87,14 @@ function initFilters() {
             .text(function(d){return d;})
             .attr("value",function(d){return d;});
             
-            d3.select("#country").selectAll("option")
-                .data(data.map(function(d){ return d.country; })
-                                    .reduce(function(p, v){ return p.indexOf(v) == -1 ? p.concat(v) : p; }, [])
-                                    .filter(function(d){ return (d !== "NA"); })
-                            )    .enter()
-                .append("option")
-                .text(function(d){return d;})
-                .attr("value",function(d){return d;});
+        d3.select("#country").selectAll("option")
+            .data(data.map(function(d){ return d.country; })
+                                .reduce(function(p, v){ return p.indexOf(v) == -1 ? p.concat(v) : p; }, [])
+                                .filter(function(d){ return (d !== "NA"); })
+                        )    .enter()
+            .append("option")
+            .text(function(d){return d;})
+            .attr("value",function(d){return d;});
 
     });
 }
@@ -180,19 +180,24 @@ function formatCsvData(data) {
         for (var r=0; r < rows.length; r++ ){
             for (var c=0; c < cols.length; c++){
                 var cell = { "pos" : p, "studies" : [], "N" : 0, "row" : rows[r], "col" : cols[c] };
+                var cell_uniq_studynames = [];
                 for (var d=0; d < data.length; d++ ){
                     if (data[d][rows[r]] >= 1 && data[d][cols[c]] >= 1){
-                        cell.studies.push( { 
-                            "studyname" : data[d].studyname,
-                            "authors" : data[d].authors,
-                            "journal" : data[d].journal,
-                            "year" : data[d].year,
-                            "quality_score" : data[d].quality_score
-                        });
-                        cell.N += 1;
+                        if (cell_uniq_studynames.indexOf(data[d].studyname) == -1){
+                            cell.studies.push( { 
+                                "studyname" : data[d].studyname,
+                                "authors" : data[d].authors,
+                                "journal" : data[d].journal,
+                                "year" : data[d].year,
+                                "quality_score" : data[d].quality_score
+                            });
+                            cell.N += 1;
+                            cell_uniq_studynames.push(data[d].studyname);
+                        }
                     }
                 }
                 p++;
+                console.log(cell);
                 fmt_data.push(cell);
             }
         }
@@ -218,14 +223,19 @@ function initTable(){
                     .offset([-8, -55])
                     // .html(function(d) { return "<b>"+d.N+"</b>"+ " studies<br>"; });
                     .html(function(d) { 
-                        if (d.N == 1) {
-                            var html = "<h5><b>"+d.N+"</b>"+ " study<br></h5>";
+
+                        var uniq_studies = d.studies;
+                        N = uniq_studies.length;
+
+                        if (N == 1) {
+                            var html = "<h5><b>"+N+"</b>"+ " study<br></h5>";
                         } else {
-                            var html = "<h5><b>"+d.N+"</b>"+ " studies<br></h5>";
+                            var html = "<h5><b>"+N+"</b>"+ " studies<br></h5>";
                         }
 
-                        for (var i=0; i < d.studies.length; i++) {
-                            html += d.studies[i].authors + " (" + d.studies[i].year + ")<br><br>";
+                        for (var i=0; i < uniq_studies.length; i++) {
+                            html += '<b>"'+uniq_studies[i].studyname+'" </b><br>';
+                            html += uniq_studies[i].authors + " (" + uniq_studies[i].year + ")<br><br>";
                         }
 
                         return html;
@@ -274,12 +284,12 @@ function initTable(){
         }
 
         N = uniq_studies.length;
-        console.log(uniq_studies);
+        // console.log(uniq_studies);
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h6><b>" + N + "</b> unique study:</h6>");  
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique study:</h5>");  
         } else {
-            d3.select("#numStudies").html("<h6><b>" + N + "</b> unique studies:</h6>");  
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique studies:</h5>");  
         }
     });
 
@@ -340,12 +350,12 @@ function updateTable() {
         N = uniq_studies.length;
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h6><b>" + N + "</b> unique study:</h6>");  
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique study:</h5>");  
         } else {
-            d3.select("#numStudies").html("<h6><b>" + N + "</b> unique studies:</h6>");  
+            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique studies:</h5>");  
         }
         
-        console.log(uniq_studies);
+        // console.log(uniq_studies);
 
 
     });

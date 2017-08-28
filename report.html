@@ -1,5 +1,6 @@
 
 <html>
+
 <head>
  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 <title>Evidence gap map</title>
@@ -11,38 +12,27 @@
 
 <script src="js/lib/bootstrap-4.min.js"></script>
 
-<link rel="stylesheet" href="css/bootstrap-glyphicons.v3.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css">
 <link rel="stylesheet" href="css/bootstrap.v4.min.css">
 
 <script src="js/lib/d3.tip.v0.6.3.js"></script>
 <script src="js/viz.js"></script>
 
 <link rel="stylesheet" href="css/main.css">
-
-
-
 </head>
 
 <body>
+
+<style type="text/css">
+    body {
+        font-family: "Times New Roman";
+    }
+</style>
 
 
   <div class="container-fluid" style="overflow:hidden;">
     <br>
     <h1>Evidence gap map for information and government accountability</h1>
-
-        <p style="font-size:8pt">
-        We (<a href="http://www.mitgovlab.org" target="_blank">MIT GOV/LAB</a>) designed a 
-        systematic search for literature published in the last 10 years addressing 
-        the effects of information on government accountability, both between 
-        government and citizens and within government. A total of 34 relevant papers 
-        were found. The table below maps the findings of the evidence base. An 
-        accompanying report reviews the literature and proposes a framework for 
-        thinking of the chain between information and accountability.
-        </p>
-
-    <br>
-    <h5>Create a filter based on different study criteria. Hover over resulting cells in table below to view details.</h5>
-
 
     <hr>
 
@@ -396,7 +386,9 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th colspan=2 style='color:grey; text-align:center'><h5><small>Outcomes &nbsp; &#10145;<br>measured &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5></small></th>
+                <th colspan=2 style='color:grey; text-align:center'>
+<!--                     <h5><small>Outcomes &nbsp; &#10145;<br>measured &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5></small> -->
+                </th>
                 <th colspan=2 style="font-size:11pt">
                     Ability
                     to hold
@@ -421,7 +413,9 @@
                 </th>
             </tr>
             <tr>
-                <th colspan=2 style='color:grey; text-align:center'><h5><small>Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>provided&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&#11015; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </small></h5></th>
+                <th colspan=2 style='color:grey; text-align:center'>
+<!--                     <h5><small>Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>provided&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&#11015; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </small></h5> -->
+                </th>
                 <th class="th_sub" id="know_monitor">
                     Accountability actors'<br> 
                     knowledge of how to<br> 
@@ -553,10 +547,6 @@
     </div>
     <br>
 
-    <a href="/data/GOVLAB_transparency_lit_review.csv" class="btn btn-info btn-md">
-      <span class="glyphicon glyphicon-download-alt"></span> 
-      Download full review
-    </a>
 
     <hr>
 
