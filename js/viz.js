@@ -3,6 +3,7 @@
 
 var CSV_FILE_LOC = "./data/GOVLAB_transparency_lit_review.csv";
 
+
 var cols = [
     "know_monitor",
     "know_sanction",
@@ -43,6 +44,8 @@ var filterNames = [
     "principal",
     "agent"
 ]
+
+var CURR_FILTER_VALS = [];
 
 $(document).ready(function() {
 
@@ -119,7 +122,7 @@ function collectUserFilters() {
 function filterCsvData(data) {
 
     // collect user inputs
-    var filter_vals = collectUserFilters();
+    CURR_FILTER_VALS = collectUserFilters();
     var selected_country = document.getElementById("country").querySelector("option:checked").text;
     var selected_region = document.getElementById("region").querySelector("option:checked").text;
 
@@ -131,13 +134,13 @@ function filterCsvData(data) {
         var loc_value = selected_region;
     }
     // apply user inputs
-    var flt_data = data.filter(function(d){
+    var flt_data = data.filter(function(d) {
 
         for (var i=0; i < filters.length; i++){
             var filter = filters[i];
             var d_vals = d[filter].split(";");
 
-            if (filter_vals[i].indexOf(0) != -1) {
+            if (CURR_FILTER_VALS[i].indexOf(0) != -1) {
                 // if user selected the '0' option ('All'), then
                 // include this row.
                 continue;
@@ -147,7 +150,7 @@ function filterCsvData(data) {
             for (var j=0, len=d_vals.length; j<len; j++){
                 var d_val = parseInt(d_vals[j], 10);
 
-                if (filter_vals[i].indexOf(d_val) != -1){
+                if (CURR_FILTER_VALS[i].indexOf(d_val) != -1){
                     // check if the user specified any 
                     // value present for this category
                     any_vals = true;
@@ -189,7 +192,9 @@ function formatCsvData(data) {
                                 "authors" : data[d].authors,
                                 "journal" : data[d].journal,
                                 "year" : data[d].year,
-                                "quality_score" : data[d].quality_score
+                                "quality_score" : data[d].quality_score,
+                                "URL" : data[d].link,
+                                "abstract" : data[d].abstract
                             });
                             cell.N += 1;
                             cell_uniq_studynames.push(data[d].studyname);
@@ -253,13 +258,18 @@ function initTable(){
                 tip.show(d);
                 d3.select(this)
                    .transition()
+                   .style("cursor", "pointer")
                    .attr("fill", "red");
             })
             .on('mouseout', function(d){
                 tip.hide(d);
                 d3.select(this)
                    .transition()
+                   .style("cursor", "default")
                    .attr("fill", "black");
+            })
+            .on("click", function(d){
+                generatePDF(d, CURR_FILTER_VALS);
             })
             .transition()
             .attr("r", function(d){
@@ -363,5 +373,90 @@ function updateTable() {
     
     return false;
 
+}
+
+function generatePDF(data, filters) {
+    // generate PDF upon click of a specific cell in the table
+
+
+    // PDF generator object (see `generatePDF` function)
+    const pdf = new jsPDF(); 
+
+    // pdf.addImage(GOVLAB_LOGO_DATA_URL, 'JPEG', 4, 10, 75, 18);
+
+    pdf.setFont("helvetica");
+    pdf.setFontType("bold");
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFontSize(20);
+    pdf.text(10, 25, "MIT GOV/LAB Evidence Gap Report");
+
+    pdf.setFont("helvetica");
+    pdf.setFontType("normal");
+    pdf.setTextColor(40, 82, 190);
+    pdf.setFontSize(12);
+    pdf.text(10, 33, "http://www.mitgovlab.org");
+
+    pdf.setLineWidth(0.5);
+    pdf.line(10, 37, 180, 37);
+
+    pdf.setFont("helvetica");
+    pdf.setFontType("bold");
+    pdf.setTextColor(0,0,0);
+    pdf.setFontSize(14);
+
+
+    var uniq_studies = data.studies;
+    N = uniq_studies.length;
+
+    if (N == 1) {
+        var study_num = N+" study:";
+    } else {
+        var study_num = N+" studies:";
+    }
+
+    pdf.text(10, 45, study_num);
+
+    var ypos = 55;
+    var studytext = "";
+    pdf.setFont("helvetica");
+    pdf.setFontType("normal");
+    pdf.setFontSize(12);
+    pdf.page = 1;
+    pdf.text(150,285, "page "+pdf.page);
+
+
+    var studytext = "";
+    for (var i=0; i < uniq_studies.length; i++) {
+        studytext += "\nTitle:  ";
+        studytext += uniq_studies[i].studyname;
+        studytext += "\nAuthors:  ";
+        studytext += uniq_studies[i].authors 
+        studytext += "\nYear:  " 
+        studytext += uniq_studies[i].year;
+        studytext += "\nAbstract:  " + uniq_studies[i].abstract;
+        studytext += "\nURL:  " + uniq_studies[i].URL;
+        studytext += "\n\n\n";
+
+        if (i % 2 == 1) {
+            pdf.text(10, ypos, pdf.splitTextToSize(studytext, 150));
+            if (i != uniq_studies.length-1){
+                pdf.addPage();
+                pdf.page++;
+                pdf.text(150,285, "page "+pdf.page);
+            }
+            studytext = "";
+            var ypos = 38;
+        }
+
+
+    }
+
+
+
+
+
+
+
+    pdf.save();
 }
 
