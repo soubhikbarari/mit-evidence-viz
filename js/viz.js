@@ -43,7 +43,65 @@ var filterNames = [
     "setting",
     "principal",
     "agent"
+];
+
+var filterValues = [
+    [
+        "Any",
+        "Trainings",
+        "Media campaign",
+        "Pamphlets or letters",
+        "Other",
+        "FOIA"
+    ],
+    [
+        "Any",
+        "Education",
+        "Health",
+        "Entitlements",
+        "Other"
+    ],
+    [
+        "Any",
+        "Experimental",
+        "SOO",
+        "FE",
+        "DiD",
+        "RDD",
+        "IV",
+        "Correlational",
+        "Qualitative"
+    ],
+    [
+        "Any",
+        "National",
+        "Intermediate",
+        "Local"
+    ],
+    [
+        "Any",
+        "Urban",
+        "Rural",
+        "Peri-urban"
+    ],
+    [
+        "Any",
+        "Citizens",
+        "Politicians",
+        "Bureaucrats",
+        "Judicial body",
+        "Other"
+    ],
+    [
+        "Any",
+        "Citizens",
+        "Politicians",
+        "Bureaucrats",
+        "Judicial body",
+        "Other"
+    ]
 ]
+
 
 var CURR_FILTER_VALS = [];
 
@@ -378,7 +436,6 @@ function updateTable() {
 function generatePDF(data, filters) {
     // generate PDF upon click of a specific cell in the table
 
-
     // PDF generator object (see `generatePDF` function)
     const pdf = new jsPDF(); 
 
@@ -404,25 +461,70 @@ function generatePDF(data, filters) {
     pdf.setTextColor(0,0,0);
     pdf.setFontSize(14);
 
+    var yOffset = 10;
+    if (CURR_FILTER_VALS.length > 0) {
+
+        pdf.setFont("helvetica");
+        pdf.setFontType("bold");
+        pdf.text(10, 45, "Subset of studies:");
+        pdf.setFontSize(12);
+
+        allAny = true;
+        for (i=0; i < CURR_FILTER_VALS.length; i++) {
+            console.log(filterNames[i]);
+            console.log(CURR_FILTER_VALS[i]);
+
+            if (CURR_FILTER_VALS[i].indexOf(0) == -1){
+
+                allAny = false;
+
+                pdf.setFont("helvetica");
+                pdf.setFontType("bold");
+                pdf.text(15, 45+yOffset, filterNames[i]+"? ");
+
+                filterText = "";
+                for (j=0; j < CURR_FILTER_VALS[i].length; j++) {
+                    filterText += filterValues[i][j];
+                    if (j != CURR_FILTER_VALS[i].length-1) {
+                        filterText += ", ";
+                    }
+                }
+                pdf.setFontType("italic");
+                pdf.text(80, 45+yOffset, filterText)
+
+                yOffset += 5;
+            }
+        }
+
+        if (allAny) {
+            pdf.setFontType("normal");
+            pdf.text(15, 45+yOffset, "(all)")
+            yOffset += 5;
+        }
+
+    }
+
 
     var uniq_studies = data.studies;
     N = uniq_studies.length;
 
     if (N == 1) {
-        var study_num = N+" study:";
+        var study_num = N+" matching study:";
     } else {
-        var study_num = N+" studies:";
+        var study_num = N+" matching studies:";
     }
 
-    pdf.text(10, 45, study_num);
+    pdf.setFontType("bold");
+    pdf.setFontSize(14);
+    pdf.text(10, 50+yOffset, study_num);
 
-    var ypos = 55;
+    var ypos = 45+yOffset+10;
     var studytext = "";
     pdf.setFont("helvetica");
     pdf.setFontType("normal");
     pdf.setFontSize(12);
     pdf.page = 1;
-    pdf.text(150,285, "page "+pdf.page);
+    pdf.text(180,285, "page "+pdf.page);
 
 
     var studytext = "";
@@ -437,16 +539,20 @@ function generatePDF(data, filters) {
         studytext += "\nURL:  " + uniq_studies[i].URL;
         studytext += "\n\n\n";
 
-        if (i % 2 == 1) {
+        if (i == uniq_studies.length-1){
             pdf.text(10, ypos, pdf.splitTextToSize(studytext, 150));
-            if (i != uniq_studies.length-1){
-                pdf.addPage();
-                pdf.page++;
-                pdf.text(150,285, "page "+pdf.page);
-            }
+        }
+
+        if (i % 2 == 1 & i != uniq_studies.length-1) {
+            pdf.text(10, ypos, pdf.splitTextToSize(studytext, 150));
+            pdf.addPage();
+            pdf.page++;
+            pdf.text(180,285, "page "+pdf.page);
+    
             studytext = "";
             var ypos = 38;
         }
+
 
 
     }
