@@ -25,6 +25,27 @@ var rows = [
     // , "provider_outcomes"
 ];
 
+var rowNames = [
+    "Accountability actors' avenues of redress",
+    "Service providers' duties and obligations",
+    "Accountability actors' civic duties",
+    "Inputs available to service providers",
+    "Service providers' level of effort",
+    "Outputs/outcomes produced by providers"
+];
+
+var colNames =[
+    "Knowledge of how to monitor agents",
+    "Knowledge of how to sanction agents",
+    "Monitoring of agents",
+    "Sanctioning of agents",
+    "Providers' level of effort",
+    "Providers' level of corruption",
+    "Outputs",
+    "Development outcomes"
+];
+
+
 var filters = [
     "delivery_mode",
     "sector",
@@ -104,6 +125,8 @@ var filterValues = [
 
 
 var CURR_FILTER_VALS = [];
+var CURR_COUNTRY_SEL = null;
+var CURR_REGION_SEL = null;
 
 $(document).ready(function() {
 
@@ -181,15 +204,15 @@ function filterCsvData(data) {
 
     // collect user inputs
     CURR_FILTER_VALS = collectUserFilters();
-    var selected_country = document.getElementById("country").querySelector("option:checked").text;
-    var selected_region = document.getElementById("region").querySelector("option:checked").text;
+    CURR_COUNTRY_SEL = document.getElementById("country").querySelector("option:checked").text;
+    CURR_REGION_SEL = document.getElementById("region").querySelector("option:checked").text;
 
-    if (selected_country != "Any") {
+    if (CURR_COUNTRY_SEL != "Any") {
         var loc_filter = "country";
-        var loc_value = selected_country;
-    } else if (selected_region != "Any") {
+        var loc_value = CURR_COUNTRY_SEL;
+    } else if (CURR_REGION_SEL != "Any") {
         var loc_filter = "region";
-        var loc_value = selected_region;
+        var loc_value = CURR_REGION_SEL;
     }
     // apply user inputs
     var flt_data = data.filter(function(d) {
@@ -221,7 +244,7 @@ function filterCsvData(data) {
 
         }
 
-        if (!(selected_country == "Any" &&  selected_region == "Any" )) { 
+        if (!(CURR_COUNTRY_SEL == "Any" &&  CURR_REGION_SEL == "Any" )) { 
             if ( d[loc_filter] != loc_value ) {
                 return false;
             }
@@ -245,26 +268,16 @@ function formatCsvData(data) {
                 for (var d=0; d < data.length; d++ ){
                     if (data[d][rows[r]] >= 1 && data[d][cols[c]] >= 1){
                         if (cell_uniq_studynames.indexOf(data[d].studyname) == -1){
-                            cell.studies.push( { 
-                                "studyname" : data[d].studyname,
-                                "authors" : data[d].authors,
-                                "journal" : data[d].journal,
-                                "year" : data[d].year,
-                                "quality_score" : data[d].quality_score,
-                                "URL" : data[d].link,
-                                "abstract" : data[d].abstract
-                            });
+                            cell.studies.push(data[d]);
                             cell.N += 1;
                             cell_uniq_studynames.push(data[d].studyname);
                         }
                     }
                 }
                 p++;
-                console.log(cell);
                 fmt_data.push(cell);
             }
         }
-        // console.log(fmt_data);
         return fmt_data;
 }
 
@@ -371,9 +384,9 @@ function updateTable() {
     var error_text = "";
 
     //// mixed up location  filter
-    var selected_country = document.getElementById("country").querySelector("option:checked").text;
-    var selected_region = document.getElementById("region").querySelector("option:checked").text;
-    if (selected_country != "Any" && selected_region != "Any" ) {
+    CURR_COUNTRY_SEL = document.getElementById("country").querySelector("option:checked").text;
+    CURR_REGION_SEL = document.getElementById("region").querySelector("option:checked").text;
+    if (CURR_COUNTRY_SEL != "Any" && CURR_REGION_SEL != "Any" ) {
         error_text += "Please select EITHER <strong>region</strong> filter OR <strong>country</strong> filter.<br>"
     }
 
@@ -470,9 +483,28 @@ function generatePDF(data, filters) {
         pdf.setFontSize(12);
 
         allAny = true;
+
+        if (CURR_REGION_SEL != null & CURR_REGION_SEL != "Any") {
+            pdf.setFont("helvetica");
+            pdf.setFontType("bold");
+            pdf.text(15, 45+yOffset, "region? ");
+            pdf.setFontType("italic");
+            pdf.text(80, 45+yOffset, CURR_REGION_SEL)
+            yOffset += 5;
+            allAny = false;
+        }
+
+        if (CURR_COUNTRY_SEL != null & CURR_COUNTRY_SEL != "Any") {
+            pdf.setFont("helvetica");
+            pdf.setFontType("bold");
+            pdf.text(15, 45+yOffset, "country? ");
+            pdf.setFontType("italic");
+            pdf.text(80, 45+yOffset, CURR_COUNTRY_SEL);
+            allAny = false;
+            yOffset += 5;
+        }
+
         for (i=0; i < CURR_FILTER_VALS.length; i++) {
-            console.log(filterNames[i]);
-            console.log(CURR_FILTER_VALS[i]);
 
             if (CURR_FILTER_VALS[i].indexOf(0) == -1){
 
@@ -484,7 +516,7 @@ function generatePDF(data, filters) {
 
                 filterText = "";
                 for (j=0; j < CURR_FILTER_VALS[i].length; j++) {
-                    filterText += filterValues[i][j];
+                    filterText += filterValues[i][j+1];
                     if (j != CURR_FILTER_VALS[i].length-1) {
                         filterText += ", ";
                     }
@@ -503,7 +535,6 @@ function generatePDF(data, filters) {
         }
 
     }
-
 
     var uniq_studies = data.studies;
     N = uniq_studies.length;
@@ -524,11 +555,12 @@ function generatePDF(data, filters) {
     pdf.setFontType("normal");
     pdf.setFontSize(12);
     pdf.page = 1;
-    pdf.text(180,285, "page "+pdf.page);
+    pdf.text(180, 285, "page "+pdf.page);
 
 
     var studytext = "";
     for (var i=0; i < uniq_studies.length; i++) {
+        console.log(uniq_studies);
         studytext += "\nTitle:  ";
         studytext += uniq_studies[i].studyname;
         studytext += "\nAuthors:  ";
@@ -537,6 +569,25 @@ function generatePDF(data, filters) {
         studytext += uniq_studies[i].year;
         studytext += "\nAbstract:  " + uniq_studies[i].abstract;
         studytext += "\nURL:  " + uniq_studies[i].URL;
+        
+        studytext += "\n\nINFORMATION PROVIDED: "
+        for (var r=0; r < rows.length; r++) {
+            if (uniq_studies[i][rows[r]] == 1) {
+                studytext += rowNames[r] + ", ";
+            }
+        }
+        studytext = studytext.slice(0, studytext.length-2);
+
+
+        studytext += "\nOUTCOMES MEASURED: "
+        for (var c=0; c < cols.length; c++) {
+            if (uniq_studies[i][cols[c]] == 1) {
+                studytext += colNames[c] + ", ";
+            }
+        }
+        studytext = studytext.slice(0, studytext.length-2);
+
+
         studytext += "\n\n\n";
 
         if (i == uniq_studies.length-1){
@@ -547,20 +598,13 @@ function generatePDF(data, filters) {
             pdf.text(10, ypos, pdf.splitTextToSize(studytext, 150));
             pdf.addPage();
             pdf.page++;
-            pdf.text(180,285, "page "+pdf.page);
+            pdf.text(180, 285, "page "+pdf.page);
     
             studytext = "";
             var ypos = 38;
         }
 
-
-
     }
-
-
-
-
-
 
 
     pdf.save();
