@@ -339,8 +339,8 @@ function initTable(){
                    .style("cursor", "default")
                    .attr("fill", "black");
             })
-            .on("click", function(d){
-                generatePDF(d, CURR_FILTER_VALS);
+            .on("click", function(d, i){
+                generatePDF(d, CURR_FILTER_VALS, i);
             })
             .transition()
             .attr("r", function(d){
@@ -446,13 +446,9 @@ function updateTable() {
 
 }
 
-function generatePDF(data, filters) {
+function generatePDF(data, filters, bubbleIdx) {
     // generate PDF upon click of a specific cell in the table
-
-    // PDF generator object (see `generatePDF` function)
     const pdf = new jsPDF(); 
-
-    // pdf.addImage(GOVLAB_LOGO_DATA_URL, 'JPEG', 4, 10, 75, 18);
 
     pdf.setFont("helvetica");
     pdf.setFontType("bold");
@@ -475,12 +471,13 @@ function generatePDF(data, filters) {
     pdf.setFontSize(14);
 
     var yOffset = 10;
-    if (CURR_FILTER_VALS.length > 0) {
 
-        pdf.setFont("helvetica");
-        pdf.setFontType("bold");
-        pdf.text(10, 45, "Subset of studies:");
-        pdf.setFontSize(12);
+    pdf.setFont("helvetica");
+    pdf.setFontType("bold");
+    pdf.text(10, 45, "Subset of accountability studies");
+    pdf.setFontSize(12);
+
+    if (CURR_FILTER_VALS.length > 0) {
 
         allAny = true;
 
@@ -536,13 +533,25 @@ function generatePDF(data, filters) {
 
     }
 
+    pdf.setFontType("bold");
+    pdf.text(15, 45+yOffset, "information provided: ");
+    pdf.setFontType("italic");
+    pdf.text(80, 45+yOffset, rowNames[rows.indexOf(data["row"])]);
+    yOffset += 5;
+
+    pdf.setFontType("bold");
+    pdf.text(15, 45+yOffset, "outcomes measured: ");
+    pdf.setFontType("italic");
+    pdf.text(80, 45+yOffset, colNames[cols.indexOf(data["col"])]);
+    yOffset += 5;
+
     var uniq_studies = data.studies;
     N = uniq_studies.length;
 
     if (N == 1) {
-        var study_num = N+" matching study:";
+        var study_num = N+" result";
     } else {
-        var study_num = N+" matching studies:";
+        var study_num = N+" results";
     }
 
     pdf.setFontType("bold");
@@ -569,24 +578,6 @@ function generatePDF(data, filters) {
         studytext += uniq_studies[i].year;
         studytext += "\nAbstract:  " + uniq_studies[i].abstract;
         studytext += "\nURL:  " + uniq_studies[i].URL;
-        
-        studytext += "\n\nINFORMATION PROVIDED: "
-        for (var r=0; r < rows.length; r++) {
-            if (uniq_studies[i][rows[r]] == 1) {
-                studytext += rowNames[r] + ", ";
-            }
-        }
-        studytext = studytext.slice(0, studytext.length-2);
-
-
-        studytext += "\nOUTCOMES MEASURED: "
-        for (var c=0; c < cols.length; c++) {
-            if (uniq_studies[i][cols[c]] == 1) {
-                studytext += colNames[c] + ", ";
-            }
-        }
-        studytext = studytext.slice(0, studytext.length-2);
-
 
         studytext += "\n\n\n";
 
