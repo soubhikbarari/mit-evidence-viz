@@ -1,7 +1,10 @@
 
 
-
 var CSV_FILE_LOC = "./data/GOVLAB_transparency_lit_review.csv";
+var CURR_FILTER_VALS   = [];
+var CURR_COUNTRY_SEL   = null;
+var CURR_REGION_SEL    = null;
+var ADDTNL_COUNTRY_SEL = [];
 
 
 var cols = [
@@ -123,11 +126,6 @@ var filterValues = [
     ]
 ]
 
-
-var CURR_FILTER_VALS = [];
-var CURR_COUNTRY_SEL = null;
-var CURR_REGION_SEL = null;
-
 $(document).ready(function() {
 
     initButtons();
@@ -135,7 +133,56 @@ $(document).ready(function() {
     initTable();
     initToolTips();
 
+    clearCountryIfRegionSelected();
+
+    toggleSimilarCountrySliders();
+    updateSimilarCountrySliders();
+
 });
+
+function clearCountryIfRegionSelected() {
+    // if a region is selected, automatically clear
+    // the country field
+    $("#region").on("change", function() {
+        if (document.getElementById("region").value != "Any") {
+            document.getElementById("country").value = "Any";
+            $("#distanceFilter").hide();
+        }
+    })
+}
+
+function toggleSimilarCountrySliders() {
+    // filter for countries appears only if
+    // a country is actually selected 
+    $("#country").on("change", function() {
+        if (document.getElementById("country").value != "Any") {
+            document.getElementById("region").value = "Any";
+            $("#distanceFilter").show();
+        } else {
+            $("#distanceFilter").hide();
+        }
+    });
+}
+
+function updateSimilarCountrySliders() {
+
+    $("#politicians-slider").on("mousemove", function() {
+        $("#politicians-num").text($("#politicians-slider").val());
+    });
+
+    $("#bureaucracy-slider").on("mousemove", function() {
+        $("#bureaucracy-num").text($("#bureaucracy-slider").val());
+    });
+
+    $("#citizens-slider").on("mousemove", function() {
+        $("#citizens-num").text($("#citizens-slider").val());
+    });
+
+    $("#overall-slider").on("mousemove", function() {
+        $("#overall-num").text($("#overall-slider").val());
+    });
+
+}
 
 function initButtons() {
     $(".alert").hide();
@@ -183,6 +230,7 @@ function initFilters() {
     });
 }
 
+
 function collectUserFilters() {
     // collect user inputs
     var filter_vals = [];
@@ -203,7 +251,11 @@ function collectUserFilters() {
 function filterCsvData(data) {
 
     // collect user inputs
+
+    //// filters
     CURR_FILTER_VALS = collectUserFilters();
+
+    //// collect main geographic area
     CURR_COUNTRY_SEL = document.getElementById("country").querySelector("option:checked").text;
     CURR_REGION_SEL = document.getElementById("region").querySelector("option:checked").text;
 
@@ -214,6 +266,20 @@ function filterCsvData(data) {
         var loc_filter = "region";
         var loc_value = CURR_REGION_SEL;
     }
+
+    //// collect additional countries
+    // alert($("#bureaucracy-slider").val());
+    // alert($("#politicians-slider").val());
+    // alert($("#citizens-slider").val());
+    // alert($("#overall-slider").val());
+
+    if (loc_filter == "country") {
+        ADDTNL_COUNTRY_SEL = D_BUR[loc_value].slice(1, $("#bureaucracy-slider").val());
+        ADDTNL_COUNTRY_SEL = ADDTNL_COUNTRY_SEL.concat(D_POL[loc_value].slice(1, $("#politicians-slider").val()));
+        ADDTNL_COUNTRY_SEL = ADDTNL_COUNTRY_SEL.concat(D_CIT[loc_value].slice(1, $("#citizens-slider").val()));
+        ADDTNL_COUNTRY_SEL = ADDTNL_COUNTRY_SEL.concat(D_ALL[loc_value].slice(1, $("#overall-slider").val()));
+    }
+
     // apply user inputs
     var flt_data = data.filter(function(d) {
 
@@ -245,9 +311,19 @@ function filterCsvData(data) {
         }
 
         if (!(CURR_COUNTRY_SEL == "Any" &&  CURR_REGION_SEL == "Any" )) { 
+
+            if ( !(CURR_COUNTRY_SEL == "Any") && (ADDTNL_COUNTRY_SEL.length != 0 )) {
+                // return this country if it's in our list of 
+                // similar countries
+                if ( ADDTNL_COUNTRY_SEL.indexOf(d[loc_filter]) != -1 ) {
+                    return true;
+                }
+            }
+
             if ( d[loc_filter] != loc_value ) {
                 return false;
             }
+
         }
 
         return true;
@@ -368,9 +444,9 @@ function initTable(){
         // console.log(uniq_studies);
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique study:</h5>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> unique study:</h4>");  
         } else {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique studies:</h5>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> unique studies:</h4>");  
         }
     });
 
@@ -407,6 +483,8 @@ function updateTable() {
     d3.select("#errorText").html("");
     $('.alert').hide();
 
+
+
     d3.csv(CSV_FILE_LOC, function(data){
         flt_data = filterCsvData(data);
         new_data = formatCsvData(flt_data);
@@ -431,13 +509,12 @@ function updateTable() {
         N = uniq_studies.length;
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique study:</h5>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> unique study:</h4>");  
         } else {
-            d3.select("#numStudies").html("<h5><b>" + N + "</b> unique studies:</h5>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> unique studies:</h4>");  
         }
         
         // console.log(uniq_studies);
-
 
     });
     
@@ -454,7 +531,7 @@ function generatePDF(data, filters, bubbleIdx) {
     pdf.setFontType("bold");
     pdf.setTextColor(0, 0, 0);
     pdf.setFontSize(20);
-    pdf.text(10, 25, "MIT GOV/LAB Evidence Gap Report");
+    pdf.text(10, 25, "MIT GOV/LAB Information and Government Accountability Lit. Review");
 
     pdf.setFont("helvetica");
     pdf.setFontType("normal");
@@ -474,7 +551,7 @@ function generatePDF(data, filters, bubbleIdx) {
 
     pdf.setFont("helvetica");
     pdf.setFontType("bold");
-    pdf.text(10, 45, "Subset of accountability studies");
+    pdf.text(10, 45, "Criteria for studies");
     pdf.setFontSize(12);
 
     if (CURR_FILTER_VALS.length > 0) {

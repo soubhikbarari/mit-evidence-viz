@@ -1,5 +1,5 @@
-
 <html>
+
 <head>
  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 <title>Evidence gap map</title>
@@ -16,14 +16,18 @@
 
 <script src="js/lib/d3.tip.v0.6.3.js"></script>
 <script src="js/lib/jspdf.min.js"></script>
+
+<script type="text/javascript" src="js/TAI_distance_all.js"></script>
+<script type="text/javascript" src="js/TAI_distance_bureaucrat.js"></script>
+<script type="text/javascript" src="js/TAI_distance_citizen.js"></script>
+<script type="text/javascript" src="js/TAI_distance_politician.js"></script>
+
 <script src="js/logo.js"></script>
 <script src="js/viz.js"></script>
-
 
 <script src="js/lib/ie8.polyfils.min.js"></script>
 <script src="js/lib/iframeResizer.min.js"></script>
 <script src="js/lib/iframeResizer.contentWindow.min.js"></script>
-
 
 <link rel="stylesheet" href="css/main.css">
 
@@ -36,11 +40,11 @@
 
   <div class="container-fluid" style="overflow:hidden;">
     <br>
-    <h1>Evidence Gap Map for Information and Government Accountability</h1>
+    <h1>Information and Government Accountability: A Literature Review</h1>
 
-        <p style="font-size:8pt">
+        <p style="font-size:9pt">
         We (<a href="http://www.mitgovlab.org" target="_blank">MIT GOV/LAB</a>) designed a 
-        systematic search for literature published in the last 10 years addressing 
+        systematic search system for literature published in the last 10 years addressing 
         the effects of information on government accountability, both between 
         government and citizens and within government. A total of 34 relevant papers 
         were found. The table below maps the findings of the evidence base. An 
@@ -66,6 +70,8 @@
 
         <form id="updateForm" onsubmit="return updateTable();">
       
+            <h3 style="color:gray">Select main geographic area of study:</h3><br>
+
             <div class="form-group row" style="margin-top:0px;">
                 <div class="form-group col-3">
                     <label class="mr-sm-2" for="region"><b>Region</b></label>
@@ -74,19 +80,46 @@
                     </select>
                 </div>
                 <div class="form-group col-3">
-                    <label class="mr-sm-2" for="region"><b>Country</b></label>
+                    <label class="mr-sm-2" for="country"><b>Country</b></label>
                     <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="country">
                       <option selected>Any</option>
                     </select>
                 </div>
-
             </div>
+
+            <div class="collapse" id="distanceFilter">
+                <h3 style="color:gray">Select additional similar countries of study:</h3><br>
+
+                <h5><b><span id="bureaucracy-num">0</span></b> most similar countries by measure of <code>bureaucracy</code><br></h5>
+                <div class="slidecontainer">
+                  <input type="range" min="0" max="50" value="0" step="5" class="slider" id="bureaucracy-slider"><br><br>
+                </div>
+
+                <h5><b><span id="politicians-num">0</span></b> most similar countries by measure of <code>politicians</code><br></h5>
+                <div class="slidecontainer">
+                  <input type="range" min="0" max="50" value="0" step="5" class="slider" id="politicians-slider"><br><br>
+                </div>
+
+                <h5><b><span id="citizens-num">0</span></b> most similar countries by measure of <code>citizens</code><br></h5>
+                <div class="slidecontainer">
+                  <input type="range" min="0" max="50" value="0" step="5" class="slider" id="citizens-slider"><br><br>
+                </div>
+
+                <h5><b><span id="overall-num">0</span></b> most similar countries overall<br></h5>
+                <div class="slidecontainer">
+                  <input type="range" min="0" max="50" value="0" step="5" class="slider" id="overall-slider"><br><br>
+                </div>
+            </div>
+
+            <br><h3 style="color:gray">Select study criteria:</h3><br>
 
             <div class="row">
 
                 <div class="col col-4">
                     <div class="form-group">
-                            <label><b>Delivery mode</b></label><br>
+                            <label>
+                                <b>Delivery mode</b>
+                            </label><br>
 
                         <div class="form-check">
                             <label class="form-check-label">
@@ -433,21 +466,72 @@
                 <th class="th_sub" id="know_monitor">
                     Knowledge of how to 
                     monitor agents
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="bottom"
+                            data-original-title="Indicator for whether study measures accountability actors' knowledge of how to monitor agents">
+                    </span>
                 </th>
                 <th class="th_sub" id="know_sanction">
                     Knowledge of how to
                     sanction agents
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            data-original-title="Indicator for whether study measures accountability actors' knowledge of how to sanction agents">
+                    </span>
+
                 </th>
                 <th class="th_sub" id="effort_to_monitor">
                     Monitoring of agents
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="bottom"
+                            data-original-title="Indicator for whether study measures accountability actors' monitoring of agents">
+                    </span>
+
                 </th>
                 <th class="th_sub" id="effort_to_sanction">
                     Sanctioning of
-                    agents</th>
-                <th class="th_sub" id="provider_effort">Providers' level of effort</th>
-                <th class="th_sub" id="provider_corruption">Providers' level of corruption</th>
-                <th class="th_sub" id="outputs">Outputs</th>
-                <th class="th_sub" id="outcomes">Development outcomes</th>
+                    agents
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="bottom"
+                            data-original-title="Indicator for whether study measures accountability actors' sanctioning of agents">
+                    </span>
+                </th>
+                <th class="th_sub" id="provider_effort">
+                    Providers' level of effort
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="bottom"
+                            data-original-title="Indicator for whether study measures providers' level of effort">
+                    </span>
+                </th>
+                <th class="th_sub" id="provider_corruption">
+                    Providers' level of corruption
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="bottom"                            
+                            data-original-title="Indicator for whether study measures accountability actors' knowledge of how to monitor agents">
+                    </span>
+                </th>
+                <th class="th_sub" id="outputs">
+                    Outputs
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="bottom"
+                            data-original-title="Indicator for whether study measures Outputs">
+                    </span>
+                </th>
+                <th class="th_sub" id="outcomes">
+                    Development outcomes
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="bottom"
+                            data-original-title="Indicator for whether study measures Outcomes / Citizen welfare">
+                    </span>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -459,6 +543,11 @@
                 </th> -->
                 <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
                     Accountability actors' avenues of redress
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="right"
+                            data-original-title="Indicator for whether study provided information on accountability actors' avenues of redress">
+                    </span>
                 </th>
                 <td>  </td>
                 <td>  </td>
@@ -472,6 +561,11 @@
             <tr  id="providers_duties">
                 <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
                     Service providers' duties and obligations
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="right"
+                            data-original-title="Indicator for whether study provided information on agents duties and obligations">
+                    </span>
                 </th>
                 <td>  </td>
                 <td>  </td>
@@ -486,6 +580,11 @@
 
                 <th scope="row" colspan=2 style="font-size:11pt" class="th_sub">
                     Accountability actors' civic duties
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="right"
+                            data-original-title="Indicator for whether study provided information on accountability actors' duties">
+                    </span>
                 </th>
                 <td>  </td>
                 <td>  </td>
@@ -504,6 +603,11 @@
                 </th> -->
                 <th scope="row" colspan=2  class="th_sub" style="font-size:11pt">
                     Inputs available to service providers
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="right"
+                            data-original-title="Indicator for whether study provided information on Inputs available to service providers">
+                    </span>
                 </th>
                 <td>  </td>
                 <td>  </td>
@@ -517,6 +621,11 @@
             <tr  id="provider_effortcorr">
                 <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
                     Service providers' level of effort
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="right"
+                            data-original-title="Indicator for whether study provided information on Service providers' level of effort or corruption">
+                    </span>
                 </th>
                 <td>  </td>
                 <td>  </td>
@@ -530,6 +639,11 @@
             <tr  id="provider_outputs">
                 <th scope="row" colspan=2 style="font-size:11pt" class="th_sub">
                     Outputs/outcomes produced by providers
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            data-toggle="tooltip" 
+                            data-placement="right"
+                            data-original-title="Indicator for whether study provided information on Outputs produced by providers">
+                    </span>
                 </th>
                 <td>  </td>
                 <td>  </td>
