@@ -62,7 +62,7 @@
     <div class="container-fluid" style="overflow:hidden">
 
         <div class="row">
-            <button class="btn btn-primary btn-md" data-toggle="collapse" data-target="#formContainer" id="showFormBtn">Show filter menu</button>
+            <button class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#formContainer" id="showFormBtn">Show filter menu</button>
         </div>
         <br>
 
@@ -70,7 +70,7 @@
 
         <form id="updateForm" onsubmit="return updateTable();">
       
-            <h3 style="color:gray">Select main geographic area of study:</h3><br>
+            <h3 style="color:gray">Main geographic area of study:</h3><br>
 
             <div class="form-group row" style="margin-top:0px;">
                 <div class="form-group col-3">
@@ -88,30 +88,61 @@
             </div>
 
             <div class="collapse" id="distanceFilter">
-                <h3 style="color:gray">Select additional similar countries of study:</h3><br>
+                <h3 style="color:gray">Additional similar countries of study:</h3><br>
 
                 <h5><b><span id="bureaucracy-num">0</span></b> most similar countries by measure of <code>bureaucracy</code><br></h5>
                 <div class="slidecontainer">
-                  <input type="range" min="0" max="50" value="0" step="5" class="slider" id="bureaucracy-slider"><br><br>
+                  <input type="range" min="0" max="20" value="0" step="1" class="slider" id="bureaucracy-slider"><br><br>
                 </div>
+                <div class="card">
+                    <samp>
+                        <div class="card-block" id="bureaucracy-countries">
+                        </div>
+                    </samp>
+                </div>
+                <br>
+
 
                 <h5><b><span id="politicians-num">0</span></b> most similar countries by measure of <code>politicians</code><br></h5>
                 <div class="slidecontainer">
-                  <input type="range" min="0" max="50" value="0" step="5" class="slider" id="politicians-slider"><br><br>
+                  <input type="range" min="0" max="20" value="0" step="1" class="slider" id="politicians-slider"><br><br>
                 </div>
+                <div class="card">
+                    <samp>
+                        <div class="card-block" id="politicians-countries">
+                        </div>
+                    </samp>
+                </div>
+                <br>
+
 
                 <h5><b><span id="citizens-num">0</span></b> most similar countries by measure of <code>citizens</code><br></h5>
                 <div class="slidecontainer">
-                  <input type="range" min="0" max="50" value="0" step="5" class="slider" id="citizens-slider"><br><br>
+                  <input type="range" min="0" max="20" value="0" step="1" class="slider" id="citizens-slider"><br><br>
                 </div>
+                <div class="card">
+                    <samp>
+                        <div class="card-block" id="citizens-countries">
+                        </div>    
+                    </samp>
+                </div>
+                <br>
+
 
                 <h5><b><span id="overall-num">0</span></b> most similar countries overall<br></h5>
                 <div class="slidecontainer">
-                  <input type="range" min="0" max="50" value="0" step="5" class="slider" id="overall-slider"><br><br>
+                  <input type="range" min="0" max="20" value="0" step="1" class="slider" id="overall-slider"><br><br>
                 </div>
+                <div class="card">
+                    <samp>
+                        <div class="card-block" id="overall-countries">
+                        </div>
+                    </samp>
+                </div>
+                <br>
             </div>
 
-            <br><h3 style="color:gray">Select study criteria:</h3><br>
+            <br><h3 style="color:gray">Study criteria:</h3><br>
 
             <div class="row">
 
@@ -466,6 +497,7 @@
                 <th class="th_sub" id="know_monitor">
                     Knowledge of how to 
                     monitor agents
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="bottom"
@@ -475,6 +507,7 @@
                 <th class="th_sub" id="know_sanction">
                     Knowledge of how to
                     sanction agents
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip"
                             data-placement="bottom"
@@ -484,6 +517,7 @@
                 </th>
                 <th class="th_sub" id="effort_to_monitor">
                     Monitoring of agents
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="bottom"
@@ -494,6 +528,7 @@
                 <th class="th_sub" id="effort_to_sanction">
                     Sanctioning of
                     agents
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="bottom"
@@ -502,6 +537,7 @@
                 </th>
                 <th class="th_sub" id="provider_effort">
                     Providers' level of effort
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="bottom"
@@ -510,6 +546,7 @@
                 </th>
                 <th class="th_sub" id="provider_corruption">
                     Providers' level of corruption
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="bottom"                            
@@ -518,6 +555,7 @@
                 </th>
                 <th class="th_sub" id="outputs">
                     Outputs
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="bottom"
@@ -526,6 +564,7 @@
                 </th>
                 <th class="th_sub" id="outcomes">
                     Development outcomes
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="left"
@@ -543,6 +582,7 @@
                 </th> -->
                 <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
                     Accountability actors' avenues of redress
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="right"
@@ -561,6 +601,7 @@
             <tr  id="providers_duties">
                 <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
                     Service providers' duties and obligations
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="right"
@@ -580,6 +621,7 @@
 
                 <th scope="row" colspan=2 style="font-size:11pt" class="th_sub">
                     Accountability actors' civic duties
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="right"
@@ -603,6 +645,7 @@
                 </th> -->
                 <th scope="row" colspan=2  class="th_sub" style="font-size:11pt">
                     Inputs available to service providers
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="right"
@@ -621,6 +664,7 @@
             <tr  id="provider_effortcorr">
                 <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
                     Service providers' level of effort
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="right"
@@ -639,6 +683,7 @@
             <tr  id="provider_outputs">
                 <th scope="row" colspan=2 style="font-size:11pt" class="th_sub">
                     Outputs/outcomes produced by providers
+                    <br>
                     <span   class="glyphicon glyphicon-info-sign" 
                             data-toggle="tooltip" 
                             data-placement="right"
@@ -662,7 +707,7 @@
     <br>
 
     <a href="https://raw.githubusercontent.com/soubhikbarari/TAI_evidence_gapmap/master/data/GOVLAB_transparency_lit_review.csv"
-    download="GOVLAB_transparency_lit_review.csv" class="btn btn-info btn-md">
+    download="GOVLAB_transparency_lit_review.csv" class="btn btn-info btn-lg">
       <span class="glyphicon glyphicon-download-alt"></span> 
       Download full review
     </a>

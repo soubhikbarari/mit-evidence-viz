@@ -1,10 +1,18 @@
 
 
 var CSV_FILE_LOC = "./data/GOVLAB_transparency_lit_review.csv";
+
+// keep track of current filter values
 var CURR_FILTER_VALS   = [];
 var CURR_COUNTRY_SEL   = null;
 var CURR_REGION_SEL    = null;
-var ADDTNL_COUNTRY_SEL = [];
+
+// keep track of additional countries to filter
+var ADDTNL_BUR_COUNTRY = [];
+var ADDTNL_POL_COUNTRY = [];
+var ADDTNL_CIT_COUNTRY = [];
+var ADDTNL_ALL_COUNTRY = [];
+
 
 
 var cols = [
@@ -166,20 +174,34 @@ function toggleSimilarCountrySliders() {
 
 function updateSimilarCountrySliders() {
 
-    $("#politicians-slider").on("mousemove", function() {
-        $("#politicians-num").text($("#politicians-slider").val());
-    });
+
 
     $("#bureaucracy-slider").on("mousemove", function() {
         $("#bureaucracy-num").text($("#bureaucracy-slider").val());
+        country = document.getElementById("country").value;
+        ADDTNL_BUR_COUNTRY = D_BUR[country].slice(1, parseInt($("#bureaucracy-slider").val())+1);
+        document.getElementById("bureaucracy-countries").innerHTML = ADDTNL_BUR_COUNTRY.join(", ");
+    });
+
+    $("#politicians-slider").on("mousemove", function() {
+        $("#politicians-num").text($("#politicians-slider").val());
+        country = document.getElementById("country").value;
+        ADDTNL_POL_COUNTRY = D_POL[country].slice(1, parseInt($("#politicians-slider").val())+1);
+        document.getElementById("politicians-countries").innerHTML = ADDTNL_POL_COUNTRY.join(", ");
     });
 
     $("#citizens-slider").on("mousemove", function() {
         $("#citizens-num").text($("#citizens-slider").val());
+        country = document.getElementById("country").value;
+        ADDTNL_CIT_COUNTRY = D_CIT[country].slice(1, parseInt($("#citizens-slider").val())+1);
+        document.getElementById("citizens-countries").innerHTML = ADDTNL_CIT_COUNTRY.join(", ");
     });
 
     $("#overall-slider").on("mousemove", function() {
         $("#overall-num").text($("#overall-slider").val());
+        country = document.getElementById("country").value;
+        ADDTNL_ALL_COUNTRY = D_ALL[country].slice(1, parseInt($("#overall-slider").val())+1);
+        document.getElementById("overall-countries").innerHTML = ADDTNL_ALL_COUNTRY.join(", ");
     });
 
 }
@@ -268,16 +290,10 @@ function filterCsvData(data) {
     }
 
     //// collect additional countries
-    // alert($("#bureaucracy-slider").val());
-    // alert($("#politicians-slider").val());
-    // alert($("#citizens-slider").val());
-    // alert($("#overall-slider").val());
-
     if (loc_filter == "country") {
-        ADDTNL_COUNTRY_SEL = D_BUR[loc_value].slice(1, $("#bureaucracy-slider").val());
-        ADDTNL_COUNTRY_SEL = ADDTNL_COUNTRY_SEL.concat(D_POL[loc_value].slice(1, $("#politicians-slider").val()));
-        ADDTNL_COUNTRY_SEL = ADDTNL_COUNTRY_SEL.concat(D_CIT[loc_value].slice(1, $("#citizens-slider").val()));
-        ADDTNL_COUNTRY_SEL = ADDTNL_COUNTRY_SEL.concat(D_ALL[loc_value].slice(1, $("#overall-slider").val()));
+        ADDTNL_COUNTRY_SEL = ADDTNL_CIT_COUNTRY.concat(ADDTNL_BUR_COUNTRY)
+                                               .concat(ADDTNL_POL_COUNTRY)
+                                               .concat(ADDTNL_ALL_COUNTRY);
     }
 
     // apply user inputs
