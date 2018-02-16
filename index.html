@@ -4,33 +4,43 @@
  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 <title>Evidence gap map</title>
 
-<script src="js/lib/d3-v4.min.js"></script>
 
+<!-- LIBRARY JAVASCRIPTS -->
+<script src="js/lib/d3-v4.min.js"></script>
 <script src="js/lib/jquery-3.2.1.slim.min.js"></script>
 <script src="js/lib/tether-1.4.0.min.js"></script>
-
 <script src="js/lib/bootstrap-4.min.js"></script>
 
+
+<!-- LIBRARY STYLESHEETS -->
 <link rel="stylesheet" href="css/bootstrap-glyphicons.v3.css">
 <link rel="stylesheet" href="css/bootstrap.v4.min.css">
 
+
+<!-- STYLE-DEPENDENT LIBRARY JAVASCRIPTS -->
 <script src="js/lib/d3.tip.v0.6.3.js"></script>
 <script src="js/lib/jspdf.min.js"></script>
+<script src="js/logo.js"></script>
 
+<!-- CUSTOM JAVASCRIPTS -->
+<script type="text/javascript" src="js/TAI_countries.js"></script>
 <script type="text/javascript" src="js/TAI_distance_all.js"></script>
 <script type="text/javascript" src="js/TAI_distance_bureaucrat.js"></script>
 <script type="text/javascript" src="js/TAI_distance_citizen.js"></script>
 <script type="text/javascript" src="js/TAI_distance_politician.js"></script>
+<script type="text/javascript" src="js/TAI_distance_citizens_bureaucrat.js"></script>
+<script type="text/javascript" src="js/TAI_distance_citizens_politician.js"></script>
+<script type="text/javascript" src="js/TAI_distance_politicians_bureaucrat.js"></script>
 
-<script src="js/logo.js"></script>
 <script src="js/viz.js"></script>
 
+<!-- IFRAME EMBEDDING JAVASCRIPT -->
 <script src="js/lib/ie8.polyfils.min.js"></script>
 <script src="js/lib/iframeResizer.min.js"></script>
 <script src="js/lib/iframeResizer.contentWindow.min.js"></script>
 
+<!-- CUSTOM STYLESHEET -->
 <link rel="stylesheet" href="css/main.css">
-
 
 
 </head>
@@ -70,79 +80,96 @@
 
         <form id="updateForm" onsubmit="return updateTable();">
       
-            <h3 style="color:gray">Main geographic area of study:</h3><br>
+            <h3 style="color:gray">Select context for your project:
+                <span   class="glyphicon glyphicon-info-sign" 
+                        style="font-size:10pt; color:grey;"
+                        data-toggle="tooltip" 
+                        data-placement="bottom"
+                        data-html="true" 
+                        data-title="<h5><br>Choose either a geographic <b>region</b> <i>or</i> a specific <b>country</b> of interest. Additionally, specify whose behavior you want to change (<b>agent</b>) and who will be acting to create that change (<b>principal</b>).<br><br></h5>">
+                </span>
+            </h3><br>
 
             <div class="form-group row" style="margin-top:0px;">
                 <div class="form-group col-3">
-                    <label class="mr-sm-2" for="region"><b>Region</b></label>
+                    <label class="mr-sm-2" for="region"><b>Region</b></label><br>
                     <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="region">
                         <option selected>Any</option>
                     </select>
                 </div>
                 <div class="form-group col-3">
-                    <label class="mr-sm-2" for="country"><b>Country</b></label>
+                    <label class="mr-sm-2" for="country"><b>Country</b></label><br>
                     <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="country">
                       <option selected>Any</option>
                     </select>
                 </div>
+                <div class="form-group col-3">
+                    <label class="mr-sm-2" for="principal"><b>Principal</b></label><br>
+                    <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="principal">
+                      <option selected>Any</option>
+                      <option>Citizens</option>
+                      <option>Politicians</option>
+                      <option>Bureaucrats/Judicial body</option>
+                      <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group col-3">
+                    <label class="mr-sm-2" for="agent"><b>Agent</b></label><br>
+                    <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="agent">
+                      <option selected>Any</option>
+                      <option>Politicians</option>
+                      <option>Bureaucrats/Judicial body</option>
+                      <option>Other</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="collapse" id="distanceFilter">
-                <h3 style="color:gray">Additional similar countries of study:</h3><br>
+            <div class="collapse" id="totalStudiesDiv">
+                <h5 id="totalStudiesText"></h5>
+            </div>
+            <br><br>
 
-                <h5><b><span id="bureaucracy-num">0</span></b> most similar countries by measure of <code>bureaucracy</code><br></h5>
+            <div class="collapse" id="similaritySliderBlock">
+                <h3 style="display:hidden;">
+                    <span style="color:gray" id="similaritySliderTitle">
+                        Select other contextually similar countries for your project (optional):
+                    </span>
+                    <span   class="glyphicon glyphicon-info-sign" 
+                            id="similariySliderTooltip"
+                            style="font-size:10pt; color:grey;"
+                            data-toggle="tooltip" 
+                            data-placement="bottom"
+                            data-html="true" 
+                            title="<h5><br>Countries similar to your selected <b>country</b> are identified using a set of contextual factors based on your selection of <b>principal</b> and <b>agent</b> (see footnote for details).<br><br>Use the slider to broaden or narrow the list of similar countries. Countries are displayed in order of decreasing similarity.<br><br></h5>">
+                    </span>
+                </h3>
+
+                <br>
+
+                <h5><b><span id="sliderNum">0</span></b> <span id="sliderStatement"></span><sup>1</sup><br></h5>
                 <div class="slidecontainer">
-                  <input type="range" min="0" max="20" value="0" step="1" class="slider" id="bureaucracy-slider"><br><br>
+                    <input type="range" min="0" max="10" value="0" step="1" class="slider" id="similaritySlider"><br><br>
                 </div>
                 <div class="card">
                     <samp>
-                        <div class="card-block" id="bureaucracy-countries">
-                        </div>
+                        <div class="card-block" id="similarCountries"></div>
                     </samp>
                 </div>
                 <br>
 
-
-                <h5><b><span id="politicians-num">0</span></b> most similar countries by measure of <code>politicians</code><br></h5>
-                <div class="slidecontainer">
-                  <input type="range" min="0" max="20" value="0" step="1" class="slider" id="politicians-slider"><br><br>
-                </div>
-                <div class="card">
-                    <samp>
-                        <div class="card-block" id="politicians-countries">
-                        </div>
-                    </samp>
-                </div>
-                <br>
-
-
-                <h5><b><span id="citizens-num">0</span></b> most similar countries by measure of <code>citizens</code><br></h5>
-                <div class="slidecontainer">
-                  <input type="range" min="0" max="20" value="0" step="1" class="slider" id="citizens-slider"><br><br>
-                </div>
-                <div class="card">
-                    <samp>
-                        <div class="card-block" id="citizens-countries">
-                        </div>    
-                    </samp>
-                </div>
-                <br>
-
-
-                <h5><b><span id="overall-num">0</span></b> most similar countries overall<br></h5>
-                <div class="slidecontainer">
-                  <input type="range" min="0" max="20" value="0" step="1" class="slider" id="overall-slider"><br><br>
-                </div>
-                <div class="card">
-                    <samp>
-                        <div class="card-block" id="overall-countries">
-                        </div>
-                    </samp>
-                </div>
-                <br>
             </div>
 
-            <br><h3 style="color:gray">Study criteria:</h3><br>
+            <br><h3 style="color:gray">Select additional study criteria:
+            <!--
+                <span   class="glyphicon glyphicon-info-sign" 
+                        style="font-size:10pt; color:grey;"
+                        data-toggle="tooltip" 
+                        data-placement="bottom"
+                        data-html="true"
+                        data-title="<h5><br>Choose additional filters for the types of research studies to be displayed for your context.<br><br></h5>">
+                </span>
+            -->
+            </h3><br>
 
             <div class="row">
 
@@ -355,6 +382,7 @@
 
             </div>
 
+<!--
             <div class="row">
                 <div class="col col-4">
                     <div class="form-group">
@@ -398,6 +426,7 @@
                     </div>
                 </div>
 
+
                 <div class="col col-4">
                     <div class="form-group">
                         <label><b>Who are the agents?</b></label><br>
@@ -439,19 +468,21 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
+-->
 
             <br>
             <div class="form-group">
                 <button type="submit" class="btn btn-info" id="updateButton">Update table</button>
             </div>
 
+            <br>
             <div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorContainer">
               <button type="button" class="close" onclick="$('.alert').hide(1000)" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
-              <div id="errorText"></div>
+              <div id="errorText" style="font-size:11pt;"></div>
             </div>
 
 
@@ -499,6 +530,7 @@
                     monitor agents
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="bottom"
                             data-original-title="Indicator for whether study measures accountability actors' knowledge of how to monitor agents">
@@ -509,6 +541,7 @@
                     sanction agents
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip"
                             data-placement="bottom"
                             data-original-title="Indicator for whether study measures accountability actors' knowledge of how to sanction agents">
@@ -519,6 +552,7 @@
                     Monitoring of agents
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="bottom"
                             data-original-title="Indicator for whether study measures accountability actors' monitoring of agents">
@@ -529,7 +563,8 @@
                     Sanctioning of
                     agents
                     <br>
-                    <span   class="glyphicon glyphicon-info-sign" 
+                    <span   class="glyphicon glyphicon-info-sign"
+                            style="font-size:10pt; color:grey;" 
                             data-toggle="tooltip" 
                             data-placement="bottom"
                             data-original-title="Indicator for whether study measures accountability actors' sanctioning of agents">
@@ -539,6 +574,7 @@
                     Providers' level of effort
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="bottom"
                             data-original-title="Indicator for whether study measures providers' level of effort">
@@ -548,6 +584,7 @@
                     Providers' level of corruption
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="bottom"                            
                             data-original-title="Indicator for whether study measures accountability actors' knowledge of how to monitor agents">
@@ -557,6 +594,7 @@
                     Outputs
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="bottom"
                             data-original-title="Indicator for whether study measures Outputs">
@@ -566,6 +604,7 @@
                     Development outcomes
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="left"
                             data-original-title="Indicator for whether study measures Outcomes / Citizen welfare">
@@ -584,6 +623,7 @@
                     Accountability actors' avenues of redress
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="right"
                             data-original-title="Indicator for whether study provided information on accountability actors' avenues of redress">
@@ -603,6 +643,7 @@
                     Service providers' duties and obligations
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="right"
                             data-original-title="Indicator for whether study provided information on agents duties and obligations">
@@ -623,6 +664,7 @@
                     Accountability actors' civic duties
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="right"
                             data-original-title="Indicator for whether study provided information on accountability actors' duties">
@@ -646,7 +688,8 @@
                 <th scope="row" colspan=2  class="th_sub" style="font-size:11pt">
                     Inputs available to service providers
                     <br>
-                    <span   class="glyphicon glyphicon-info-sign" 
+                    <span   class="glyphicon glyphicon-info-sign"
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="right"
                             data-original-title="Indicator for whether study provided information on Inputs available to service providers">
@@ -666,6 +709,7 @@
                     Service providers' level of effort
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="right"
                             data-original-title="Indicator for whether study provided information on Service providers' level of effort or corruption">
@@ -685,6 +729,7 @@
                     Outputs/outcomes produced by providers
                     <br>
                     <span   class="glyphicon glyphicon-info-sign" 
+                            style="font-size:10pt; color:grey;"
                             data-toggle="tooltip" 
                             data-placement="right"
                             data-original-title="Indicator for whether study provided information on Outputs produced by providers">
@@ -706,13 +751,47 @@
     </div>
     <br>
 
+
+
     <a href="https://raw.githubusercontent.com/soubhikbarari/TAI_evidence_gapmap/master/data/GOVLAB_transparency_lit_review.csv"
-    download="GOVLAB_transparency_lit_review.csv" class="btn btn-info btn-lg">
+    download="GOVLAB_transparency_lit_review.csv" class="btn btn-success btn-lg">
       <span class="glyphicon glyphicon-download-alt"></span> 
       Download full review
     </a>
 
     <hr>
+    <br>
+
+        <button class="btn btn-secondary btn-lg" data-toggle="collapse" data-target="#footnotes" id="showFormBtn">Footnotes &#x25BC;</button>
+    <br><br>
+    <div class="jumbotron collapse" id="footnotes" style="line-height: 1;">
+        
+        <div id="similaritySliderFootnoteTitle">
+            <h4><b><sup>1</sup>Contextual similarity measurement</b><br><br></h4>
+        </div>
+        <div id="similaritySliderFootnoteText">
+            Based on your selection of principal and agent, countries 
+            similar to the one you choose are identified using a number of different 
+            contextual factors including: <br><br>
+            <ol>    
+                <li>Level of economic development</li>
+                <li>Strength of rule of law</li>
+                <li>Regime type</li>
+                <li>Degree of corruption/clientelism</li>
+                <li>Degree of procedural democracy</li>
+                <li>Degree of civic space and protection for civil freedoms</li>
+                <li>Strength of civil society sector and social movements</li>
+                <li>Professionalization of bureaucracy/bureaucratic capacity</li>
+                <li>Social capital</li>
+                <li>Horizontal accountability institutions</li>
+            </ol>
+            Select a specific country as well as principal and agent in order to 
+            discover the specific contextual factors considered.
+        </div>
+
+    </div>
+    <br><br>
+
 
 
   </div>

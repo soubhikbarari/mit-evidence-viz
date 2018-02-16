@@ -1,4 +1,6 @@
-
+/*------------
+| GLOBALS    |
+-------------*/
 
 var CSV_FILE_LOC = "./data/GOVLAB_transparency_lit_review.csv";
 
@@ -7,15 +9,21 @@ var CURR_FILTER_VALS   = [];
 var CURR_COUNTRY_SEL   = null;
 var CURR_REGION_SEL    = null;
 
+// if a partial count of studies is done based on
+// just context criteria (region/country, principal, agent)
+// keep track of it here
+var PARTIAL_STUDY_COUNT = null;
+
 // keep track of additional countries to filter
-var ADDTNL_BUR_COUNTRY = [];
-var ADDTNL_POL_COUNTRY = [];
-var ADDTNL_CIT_COUNTRY = [];
-var ADDTNL_ALL_COUNTRY = [];
+var ADDTNL_COUNTRY = [];
+
+// keep track of available data
+var AVLBL_COUNTRY = [];
+var AVLBL_REGION  = [];
 
 
-
-var cols = [
+// names for UI elements
+var COLS = [
     "know_monitor",
     "know_sanction",
     "effort_to_monitor",
@@ -26,7 +34,7 @@ var cols = [
     "outcomes"
 ];
 
-var rows = [
+var ROWS = [
     "aa_avenues_of_redress",
     "providers_duties", 
     "aa_duties", 
@@ -36,7 +44,7 @@ var rows = [
     // , "provider_outcomes"
 ];
 
-var rowNames = [
+var ROW_NAMES = [
     "Accountability actors' avenues of redress",
     "Service providers' duties and obligations",
     "Accountability actors' civic duties",
@@ -45,7 +53,7 @@ var rowNames = [
     "Outputs/outcomes produced by providers"
 ];
 
-var colNames =[
+var COL_NAMES =[
     "Knowledge of how to monitor agents",
     "Knowledge of how to sanction agents",
     "Monitoring of agents",
@@ -57,7 +65,7 @@ var colNames =[
 ];
 
 
-var filters = [
+var FILTERS = [
     "delivery_mode",
     "sector",
     "methodology",
@@ -67,7 +75,7 @@ var filters = [
     "agent"
 ];
 
-var filterNames = [
+var FILTER_NAMES = [
     "delivery mode",
     "sector",
     "methodology",
@@ -77,7 +85,7 @@ var filterNames = [
     "agent"
 ];
 
-var filterValues = [
+var FILTER_VALUES = [
     [
         "Any",
         "Trainings",
@@ -120,114 +128,70 @@ var filterValues = [
         "Any",
         "Citizens",
         "Politicians",
-        "Bureaucrats",
-        "Judicial body",
+        "Bureaucrats/Judicial body",
+        "Bureaucrats/Judicial body",
         "Other"
     ],
     [
         "Any",
         "Citizens",
         "Politicians",
-        "Bureaucrats",
-        "Judicial body",
+        "Bureaucrats/Judicial body",
+        "Bureaucrats/Judicial body",
         "Other"
     ]
 ]
 
+SIMILIARITY_METRIC_CONTEXT_FACTORS = [
+    "Level of economic development",
+    "Strength of rule of law",
+    "Regime type",
+    "Degree of corruption/clientelism",
+    "Degree of procedural democracy",
+    "Degree of civic space and protection for civil freedoms",
+    "Strength of civil society sector and social movements",
+    "Professionalization of bureaucracy/bureaucratic capacity",
+    "Social capital",
+    "Horizontal accountability institutions"
+]
+
+/*-----------
+| "MAIN"    |
+------------*/
+
 $(document).ready(function() {
 
+    // Initialize UI elements
     initButtons();
     initFilters();
     initTable();
     initToolTips();
 
-    clearCountryIfRegionSelected();
-
-    toggleSimilarCountrySliders();
-    updateSimilarCountrySliders();
+    // Listen for user updates to UI elements
+    onRegionInputUpdates();
+    onCountryInputUpdates();
+    onPrincipalAndAgentUpdates();
+    onSimilarCountrySlidersUpdates();
+    onStudyCriteriaInputUpdates();
 
 });
 
-function clearCountryIfRegionSelected() {
-    // if a region is selected, automatically clear
-    // the country field
-    $("#region").on("change", function() {
-        if (document.getElementById("region").value != "Any") {
-            document.getElementById("country").value = "Any";
-            $("#distanceFilter").hide();
-        }
-    })
-}
-
-function toggleSimilarCountrySliders() {
-    // filter for countries appears only if
-    // a country is actually selected 
-    $("#country").on("change", function() {
-        if (document.getElementById("country").value != "Any") {
-            document.getElementById("region").value = "Any";
-            $("#distanceFilter").show();
-        } else {
-            $("#distanceFilter").hide();
-        }
-    });
-}
-
-function updateSimilarCountrySliders() {
-
-
-
-    $("#bureaucracy-slider").on("mousemove", function() {
-        $("#bureaucracy-num").text($("#bureaucracy-slider").val());
-        country = document.getElementById("country").value;
-        ADDTNL_BUR_COUNTRY = D_BUR[country].slice(1, parseInt($("#bureaucracy-slider").val())+1);
-        document.getElementById("bureaucracy-countries").innerHTML = ADDTNL_BUR_COUNTRY.join(", ");
-    });
-
-    $("#politicians-slider").on("mousemove", function() {
-        $("#politicians-num").text($("#politicians-slider").val());
-        country = document.getElementById("country").value;
-        ADDTNL_POL_COUNTRY = D_POL[country].slice(1, parseInt($("#politicians-slider").val())+1);
-        document.getElementById("politicians-countries").innerHTML = ADDTNL_POL_COUNTRY.join(", ");
-    });
-
-    $("#citizens-slider").on("mousemove", function() {
-        $("#citizens-num").text($("#citizens-slider").val());
-        country = document.getElementById("country").value;
-        ADDTNL_CIT_COUNTRY = D_CIT[country].slice(1, parseInt($("#citizens-slider").val())+1);
-        document.getElementById("citizens-countries").innerHTML = ADDTNL_CIT_COUNTRY.join(", ");
-    });
-
-    $("#overall-slider").on("mousemove", function() {
-        $("#overall-num").text($("#overall-slider").val());
-        country = document.getElementById("country").value;
-        ADDTNL_ALL_COUNTRY = D_ALL[country].slice(1, parseInt($("#overall-slider").val())+1);
-        document.getElementById("overall-countries").innerHTML = ADDTNL_ALL_COUNTRY.join(", ");
-    });
-
-}
-
-function initButtons() {
-    $(".alert").hide();
-    $('#showFormBtn').click(function() {
-        if (document.getElementById("showFormBtn").innerHTML == "Show filter menu"){
-            $("#showFormBtn").text('Hide filter menu');
-        } else {
-            $("#showFormBtn").text('Show filter menu');
-        }
-        
-    });
-
-}
-
-function initToolTips(){
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    });
-}
+/*----------
+| INIT FXNS |
+-----------*/
 
 function initFilters() {
 
     d3.csv(CSV_FILE_LOC, function(data) {
+
+        AVLBL_REGION = data.map(function(d){ return d.region; })
+                           .reduce(function(p, v){ return p.indexOf(v) == -1 ? p.concat(v) : p; }, [])
+                            .filter(function(d){ return (d !== "NA"); });
+
+        AVLBL_COUNTRY = data.map(function(d){ return d.country; })
+                            .reduce(function(p, v){ return p.indexOf(v) == -1 ? p.concat(v) : p; }, [])
+                            .filter(function(d){ return (d !== "NA"); });
+
 
         // dynamic filters
         d3.select("#region").selectAll("option")
@@ -241,136 +205,14 @@ function initFilters() {
             .attr("value",function(d){return d;});
             
         d3.select("#country").selectAll("option")
-            .data(data.map(function(d){ return d.country; })
-                                .reduce(function(p, v){ return p.indexOf(v) == -1 ? p.concat(v) : p; }, [])
-                                .filter(function(d){ return (d !== "NA"); })
-                        )    .enter()
+            .data(ALL_COUNTRIES.map(function(x){ return x; })
+                               .filter(function(d){ return (d !== "NA"); })
+                        )      .enter()
             .append("option")
             .text(function(d){return d;})
             .attr("value",function(d){return d;});
 
     });
-}
-
-
-function collectUserFilters() {
-    // collect user inputs
-    var filter_vals = [];
-    for (var i=0; i < filters.length; i++){
-        var filter = filters[i];
-        var inputs = document.querySelectorAll( '[name="'+filter+'"]' );
-        var input_vals = [];
-        for (var j=0; j < inputs.length; j ++){
-            if (inputs[j].checked){
-                input_vals.push(parseInt(inputs[j].value));
-            }
-        }
-        filter_vals.push(input_vals);
-    }
-    return filter_vals;
-}
-
-function filterCsvData(data) {
-
-    // collect user inputs
-
-    //// filters
-    CURR_FILTER_VALS = collectUserFilters();
-
-    //// collect main geographic area
-    CURR_COUNTRY_SEL = document.getElementById("country").querySelector("option:checked").text;
-    CURR_REGION_SEL = document.getElementById("region").querySelector("option:checked").text;
-
-    if (CURR_COUNTRY_SEL != "Any") {
-        var loc_filter = "country";
-        var loc_value = CURR_COUNTRY_SEL;
-    } else if (CURR_REGION_SEL != "Any") {
-        var loc_filter = "region";
-        var loc_value = CURR_REGION_SEL;
-    }
-
-    //// collect additional countries
-    if (loc_filter == "country") {
-        ADDTNL_COUNTRY_SEL = ADDTNL_CIT_COUNTRY.concat(ADDTNL_BUR_COUNTRY)
-                                               .concat(ADDTNL_POL_COUNTRY)
-                                               .concat(ADDTNL_ALL_COUNTRY);
-    }
-
-    // apply user inputs
-    var flt_data = data.filter(function(d) {
-
-        for (var i=0; i < filters.length; i++){
-            var filter = filters[i];
-            var d_vals = d[filter].split(";");
-
-            if (CURR_FILTER_VALS[i].indexOf(0) != -1) {
-                // if user selected the '0' option ('All'), then
-                // include this row.
-                continue;
-            }
-
-            var any_vals = false;
-            for (var j=0, len=d_vals.length; j<len; j++){
-                var d_val = parseInt(d_vals[j], 10);
-
-                if (CURR_FILTER_VALS[i].indexOf(d_val) != -1){
-                    // check if the user specified any 
-                    // value present for this category
-                    any_vals = true;
-                }    
-            }
-
-            if (any_vals == false) {
-                return false;
-            }
-
-        }
-
-        if (!(CURR_COUNTRY_SEL == "Any" &&  CURR_REGION_SEL == "Any" )) { 
-
-            if ( !(CURR_COUNTRY_SEL == "Any") && (ADDTNL_COUNTRY_SEL.length != 0 )) {
-                // return this country if it's in our list of 
-                // similar countries
-                if ( ADDTNL_COUNTRY_SEL.indexOf(d[loc_filter]) != -1 ) {
-                    return true;
-                }
-            }
-
-            if ( d[loc_filter] != loc_value ) {
-                return false;
-            }
-
-        }
-
-        return true;
-
-    })
-    
-    return flt_data;
-}
-
-function formatCsvData(data) {
-        // [ { pos: i, studies : [ {}, {}, {}, {} ], N : x } ... ]
-        fmt_data = [];
-        p = 0;
-        for (var r=0; r < rows.length; r++ ){
-            for (var c=0; c < cols.length; c++){
-                var cell = { "pos" : p, "studies" : [], "N" : 0, "row" : rows[r], "col" : cols[c] };
-                var cell_uniq_studynames = [];
-                for (var d=0; d < data.length; d++ ){
-                    if (data[d][rows[r]] >= 1 && data[d][cols[c]] >= 1){
-                        if (cell_uniq_studynames.indexOf(data[d].studyname) == -1){
-                            cell.studies.push(data[d]);
-                            cell.N += 1;
-                            cell_uniq_studynames.push(data[d].studyname);
-                        }
-                    }
-                }
-                p++;
-                fmt_data.push(cell);
-            }
-        }
-        return fmt_data;
 }
 
 function initTable(){
@@ -429,7 +271,7 @@ function initTable(){
                 d3.select(this)
                    .transition()
                    .style("cursor", "default")
-                   .attr("fill", "black");
+                   .attr("fill", "Black");
             })
             .on("click", function(d, i){
                 generatePDF(d, CURR_FILTER_VALS, i);
@@ -443,7 +285,7 @@ function initTable(){
             })
             .attr("cx", "50%")
             .attr("cy", "50%")
-            .attr("fill", "black")
+            .attr("fill", "Black")
             .attr("id", function(d){
                 return d.id;
             })
@@ -470,25 +312,444 @@ function initTable(){
 }
 
 
+function initButtons() {
+    $(".alert").hide();
+    $('#showFormBtn').click(function() {
+        if (document.getElementById("showFormBtn").innerHTML == "Show filter menu"){
+            $("#showFormBtn").text('Hide filter menu');
+        } else {
+            $("#showFormBtn").text('Show filter menu');
+        }
+        
+    });
+
+}
+
+function initToolTips(){
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+}
+
+
+/*------------
+| LISTENERS  |
+------------*/
+
+function onStudyCriteriaInputUpdates() {
+
+}
+
+function onRegionInputUpdates() {
+
+    $("#region").on("change", function() {
+
+        selected_country   = document.getElementById("country").value;
+        selected_region    = document.getElementById("region").value;
+        selected_principal = document.getElementById("principal").value;
+        selected_agent     = document.getElementById("agent").value;
+
+        if (selected_country != "Any") {
+            document.getElementById("country").value = "Any";
+            selected_country = "Any";
+        }
+
+        updatePartialFilterNumStudiesDisplay(selected_region, selected_country, selected_principal, selected_agent);
+
+        updateSimilaritySliderOuterDisplay(selected_region, selected_country, selected_principal, selected_agent);
+
+    })
+
+}
+
+function onCountryInputUpdates() {
+    // things to do when the user 
+    // selects a new country
+
+    $("#country").on("change", function() {
+
+        selected_country   = document.getElementById("country").value;
+        selected_region    = document.getElementById("region").value;
+        selected_principal = document.getElementById("principal").value;
+        selected_agent     = document.getElementById("agent").value;
+
+        if (selected_country != "Any") {
+            document.getElementById("region").value = "Any";
+            selected_region = "Any";
+        }
+
+        updatePartialFilterNumStudiesDisplay(selected_region, selected_country, selected_principal, selected_agent);
+
+        updateSimilaritySliderOuterDisplay(selected_region, selected_country, selected_principal, selected_agent);
+
+
+    })
+}
+
+
+function onPrincipalAndAgentUpdates() {
+
+    $("#principal").on("change", function() {
+
+        selected_country   = document.getElementById("country").value;
+        selected_region    = document.getElementById("region").value;
+        selected_principal = document.getElementById("principal").value;
+        selected_agent     = document.getElementById("agent").value;
+        
+        updatePartialFilterNumStudiesDisplay(selected_region, selected_country, selected_principal, selected_agent);
+
+        updateSimilaritySliderOuterDisplay(selected_region, selected_country, selected_principal, selected_agent);
+
+    });
+
+    $("#agent").on("change", function() {
+        selected_country   = document.getElementById("country").value;
+        selected_region    = document.getElementById("region").value;
+        selected_principal = document.getElementById("principal").value;
+        selected_agent     = document.getElementById("agent").value;
+
+        updatePartialFilterNumStudiesDisplay(selected_region, selected_country, selected_principal, selected_agent);
+
+        updateSimilaritySliderOuterDisplay(selected_region, selected_country, selected_principal, selected_agent);
+
+    });
+
+}
+
+
+function onSimilarCountrySlidersUpdates() {
+
+    $("#similaritySlider").on("mousemove", function() {
+        n = parseInt($("#similaritySlider").val(), 10);
+        selected_country = document.getElementById("country").value;
+        selected_principal = document.getElementById("principal").value;
+        selected_agent     = document.getElementById("agent").value;
+        updateSimilaritySlider(n, selected_country, selected_principal, selected_agent);
+    });
+
+}
+
+/*-------------------
+| UPDATE/ACTION FXNS |
+--------------------*/
+
+
+function updatePartialFilterNumStudiesDisplay(region, country, principal, agent) {
+    // update the block of text that shows the number of studies
+    // available based on partial query (region/country/principal/agent)
+
+    principal_vidxs = FILTER_VALUES[5].map((e, i) => e === principal ? i : '').filter(String);
+    agent_vidxs = FILTER_VALUES[6].map((e, i) => e === agent ? i : '').filter(String);
+
+    d3.csv(CSV_FILE_LOC, function(data) {
+
+        var relevant_studies = data.filter(function(d) {
+
+            if (
+                    (d["country"] == country || d["region"] == region) 
+                    & 
+                    ( // study matches users' desired principal
+                        principal_vidxs.indexOf(parseInt(d["principal"], 10)) != -1 || principal == "Any" 
+                    ) 
+                    & 
+                    ( // study matches users' desired agent
+                        agent_vidxs.indexOf(parseInt(d["agent"], 10)) != -1 || agent == "Any" 
+                    )
+            ) {
+                return true;
+            }
+
+        })
+
+        PARTIAL_STUDY_COUNT = relevant_studies.length;
+
+        if (PARTIAL_STUDY_COUNT == 0) {
+
+            if ( selected_country == "Any" && selected_region != "Any" ) {
+                // user is selecting a region without any studies
+
+               document.getElementById("totalStudiesText").innerHTML = "<b>"+PARTIAL_STUDY_COUNT+"<i></b> total studies found for selected regional context. Please specify a different context.</i>";
+                document.getElementById("similaritySliderTitle").innerHTML = "Select other contextually similar countries of study:";
+
+            } 
+            if ( selected_country != "Any" ) {
+                // user is selecting a country without any studies
+
+               document.getElementById("totalStudiesText").innerHTML = "<b>"+PARTIAL_STUDY_COUNT+"<i></b> total studies found for selected country context. Please specify a different context or a search range for similar countries (with available studies) below.</i>";
+                document.getElementById("similaritySliderTitle").innerHTML = "Select other contextually similar countries of study:";
+
+                //// have the similarity slider, by default, be set to 1
+                document.getElementById("similaritySlider").value = 1;
+                updateSimilaritySlider(1, country, principal, agent);
+
+            }
+
+        } else {
+            if ( selected_country != "Any" ) {
+                document.getElementById("totalStudiesText").innerHTML = "<i><b>"+PARTIAL_STUDY_COUNT+"</b> total studies found for selected country context.</i>";
+            } 
+            if ( selected_region != "Any" ) {
+                document.getElementById("totalStudiesText").innerHTML = "<i><b>"+PARTIAL_STUDY_COUNT+"</b> total studies found for selected regional context.</i>";   
+            }
+
+            document.getElementById("similaritySliderTitle").innerHTML = "Select additional contextually similar countries of study (optional):";
+        }
+
+        $("#totalStudiesDiv").show();
+
+
+    });
+
+}
+
+function updateSimilaritySliderOuterDisplay(region, country, principal, agent) {
+    // update all the html around the similarity slider
+    // based on user inputs
+
+    if (country != "Any") {
+        //// user is selecting a specific country
+        $("#similaritySliderBlock").show();
+
+        if ((principal == "Any" && agent == "Any") || (principal == "Any" && agent == "Other") || (principal == "Other" && agent == "Any") || (principal == "Other" && agent == "Other")) {
+            document.getElementById("sliderStatement").innerHTML = "most contextually similar countries overall";
+        }
+
+        else if (principal == agent || principal == "Any" || agent == "Any" || principal == "Other" || agent == "Other" ) {
+            //// use only a single distance metric
+            single_actor = (principal == "Any" || principal == "Other") ? agent : principal;
+            document.getElementById("sliderStatement").innerHTML = "most contextually similar countries in the behavior of <code>"+single_actor+"</code>";
+        } else {
+            document.getElementById("sliderStatement").innerHTML = "most contextually similar countries in the behavior of <code>"+principal+"</code> and <code>"+agent+"</code>";
+        }
+
+        //// update tooltip
+        updateSimilaritySliderFootnote(country, principal, agent);
+
+
+
+    } else {
+        //// user is selecting a specific region
+        $("#similaritySliderBlock").hide();
+    }
+}
+
+function updateSimilaritySlider(n, country, principal, agent) {
+    // update the actual slider apparatus itself which includes
+    // the slider counter text and the block of countries below it.
+
+    $("#sliderNum").text(n);
+    ADDTNL_COUNTRY = getCountriesSimiliarTo(country, principal, agent).slice(1, n+1);
+    document.getElementById("similarCountries").innerHTML = ADDTNL_COUNTRY.join(", ");
+
+}
+
+function updateSimilaritySliderFootnote(country, principal, agent) {
+
+    htmlText = "Based on your selection of <code>"+principal+"</code> as principal and <code>"+agent+"</code> as agent, countries similar to <code>"+country+"</code>are identified using the following contextual factors:<br><br>";
+
+    if ((principal == "Citizens" && agent == "Bureaucrats/Judicial body" ) || (agent == "Citizens" && principal == "Bureaucrats/Judicial body" )) {
+        f_idxs = [1,2,3,4,6,7,8,9,10];
+    } else if ((principal == "Citizens" && agent == "Politicians" ) || (agent == "Citizens" && principal == "Politicians" )) {
+        f_idxs = [1,2,3,4,5,6,7,8,9];
+    } else if ((principal == "Bureaucrats/Judicial body" && agent == "Politicians" ) || (agent == "Bureaucrats/Judicial body" && principal == "Politicians" )) {
+        f_idxs = [1,2,3,4,5,6,7,8,10];
+    } else if (principal == "Citizen" || agent == "Citizen") {
+        f_idxs = [1,2,3,4,6,7,8,9];
+    } else if (principal == "Bureaucrats/Judicial body" || agent == "Bureaucrats/Judicial body") {
+        f_idxs = [1,2,3,4,8,10];
+    } else if (principal == "Politicians" || agent == "Politicians") {
+        f_idxs = [1,2,3,4,5,6,7];
+    } else {
+        f_idxs = [1,2,3,4];
+    }
+
+    htmlText += "<ol>";
+
+    for (i=0; i < f_idxs.length; i++) {
+        htmlText += "<li>";
+        htmlText += SIMILIARITY_METRIC_CONTEXT_FACTORS[f_idxs[i]-1];
+        htmlText += "</li>";
+    }
+    htmlText += "</ol>";
+    document.getElementById("similaritySliderFootnoteText").innerHTML = htmlText;
+
+}
+
+function getCountriesSimiliarTo(country, principal, agent) {
+    // pick the correct dictionary object to use according to the two
+    // distance metrics passed in and return all the countries for 
+    // the specific `base_country`
+
+    if ((principal == "Citizens" && agent == "Bureaucrats/Judicial body" ) || (agent == "Citizens" && principal == "Bureaucrats/Judicial body" )) {
+        d_ = D_CIT_BUR;
+    } else if ((principal == "Citizens" && agent == "Politicians" ) || (agent == "Citizens" && principal == "Politicians" )) {
+        d_ = D_CIT_POL;
+    } else if ((principal == "Bureaucrats/Judicial body" && agent == "Politicians" ) || (agent == "Bureaucrats/Judicial body" && principal == "Politicians" )) {
+        d_ = D_POL_BUR;
+    } else if (principal == "Citizen" || agent == "Citizen") {
+        d_ = D_CIT;
+    } else if (principal == "Bureaucrats/Judicial body" || agent == "Bureaucrats/Judicial body") {
+        d_ = D_BUR;
+    } else if (principal == "Politicians" || agent == "Politicians") {
+        d_ = D_POL;
+    } else {
+        d_ = D_ALL;
+    }
+
+    sim_c = d_[country].filter(function(d) { return AVLBL_COUNTRY.indexOf(d) != -1; } );
+    return sim_c;
+
+}
+
+
+
+function collectUserFilters() {
+    // collect user inputs
+    var filter_vals = [];
+    for (var i=0; i < FILTERS.length; i++){
+        if (i == 5 || i == 6) {
+            //// principal/agent is selected using a dropdown
+            //// so slightly different collection process
+            var filter = FILTERS[i];
+            filter_vals.push([FILTER_VALUES[i].indexOf(document.getElementById(filter).value)]);
+
+        } else {
+
+            var filter = FILTERS[i];
+            var inputs = document.querySelectorAll( '[name="'+filter+'"]' );
+            var input_vals = [];
+            for (var j=0; j < inputs.length; j ++){
+                if (inputs[j].checked){
+                    input_vals.push(parseInt(inputs[j].value));
+                }
+            }
+            filter_vals.push(input_vals);
+        }
+    }
+    return filter_vals;
+}
+
+function filterCsvData(data) {
+
+    // collect user inputs
+
+    //// FILTERS
+    CURR_FILTER_VALS = collectUserFilters();
+
+    //// collect main geographic area
+    CURR_COUNTRY_SEL = document.getElementById("country").value;
+    CURR_REGION_SEL = document.getElementById("region").value;
+
+    if (CURR_COUNTRY_SEL != "Any") {
+        var loc_filter = "country";
+        var loc_value = CURR_COUNTRY_SEL;
+    } else if (CURR_REGION_SEL != "Any") {
+        var loc_filter = "region";
+        var loc_value = CURR_REGION_SEL;
+    }
+
+    // apply user inputs
+    var flt_data = data.filter(function(d) {
+
+        for (var i=0; i < FILTERS.length; i++){
+            var filter = FILTERS[i];
+            var d_vals = d[filter].split(";");
+
+            if (CURR_FILTER_VALS[i].indexOf(0) != -1) {
+                // if user selected the '0' option ('All'), then
+                // include this row.
+                continue;
+            }
+
+            var any_vals = false;
+            for (var j=0, len=d_vals.length; j<len; j++){
+                var d_val = parseInt(d_vals[j], 10);
+
+                if (CURR_FILTER_VALS[i].indexOf(d_val) != -1) {
+                    // check if the user specified any 
+                    // value present for this category
+                    any_vals = true;
+                }    
+            }
+
+            if (any_vals == false) {
+                return false;
+            }
+
+        }
+
+        if (!(CURR_COUNTRY_SEL == "Any" &&  CURR_REGION_SEL == "Any" )) { 
+
+            if ( !(CURR_COUNTRY_SEL == "Any") && (ADDTNL_COUNTRY.length != 0 )) {
+                // return this country if it's in our list of 
+                // similar countries
+                if ( ADDTNL_COUNTRY.indexOf(d[loc_filter]) != -1 ) {
+                    return true;
+                }
+            }
+
+            if ( d[loc_filter] != loc_value ) {
+                return false;
+            }
+
+        }
+
+        return true;
+
+    })
+    
+    return flt_data;
+}
+
+function formatCsvData(data) {
+        // [ { pos: i, studies : [ {}, {}, {}, {} ], N : x } ... ]
+        fmt_data = [];
+        p = 0;
+        for (var r=0; r < ROWS.length; r++ ){
+            for (var c=0; c < COLS.length; c++){
+                var cell = { "pos" : p, "studies" : [], "N" : 0, "row" : ROWS[r], "col" : COLS[c] };
+                var cell_uniq_studynames = [];
+                for (var d=0; d < data.length; d++ ){
+                    if (data[d][ROWS[r]] >= 1 && data[d][COLS[c]] >= 1){
+                        if (cell_uniq_studynames.indexOf(data[d].studyname) == -1){
+                            cell.studies.push(data[d]);
+                            cell.N += 1;
+                            cell_uniq_studynames.push(data[d].studyname);
+                        }
+                    }
+                }
+                p++;
+                fmt_data.push(cell);
+            }
+        }
+        return fmt_data;
+}
+
+
 function updateTable() {
+    // function to call upon submitting
+    // the query form
 
     // check for errors
     var error_text = "";
 
-    //// mixed up location  filter
-    CURR_COUNTRY_SEL = document.getElementById("country").querySelector("option:checked").text;
-    CURR_REGION_SEL = document.getElementById("region").querySelector("option:checked").text;
-    if (CURR_COUNTRY_SEL != "Any" && CURR_REGION_SEL != "Any" ) {
-        error_text += "Please select EITHER <strong>region</strong> filter OR <strong>country</strong> filter.<br>"
-    }
-
     //// incomplete filters
     var filter_vals = collectUserFilters();
-    for (var i=0; i < filters.length; i++){
+    for (var i=0; i < FILTERS.length; i++){
         if (filter_vals[i].length == 0) {
-            error_text += "Please select an appropriate filter for <strong>"+filterNames[i]+"</strong>.<br>";
+            error_text += "- Please select an appropriate filter for <strong>"+FILTER_NAMES[i]+"</strong>.<br>";
         }
     }
+    CURR_COUNTRY_SEL = document.getElementById("country").value;
+    CURR_REGION_SEL = document.getElementById("region").value;
+
+    if ( ADDTNL_COUNTRY.length == 0 && AVLBL_COUNTRY.indexOf(CURR_COUNTRY_SEL) == -1 && CURR_COUNTRY_SEL != "Any" ) {
+        error_text += "- Context is missing information. Please select at least one <strong>country</strong> with available studies or a specific <strong>region</strong>.<br>";
+    } else if ( PARTIAL_STUDY_COUNT != null && PARTIAL_STUDY_COUNT == 0 && ADDTNL_COUNTRY.length == 0 ) {
+        //// no studies found based on partial filters
+        error_text += "- No studies can be found for context. Please specify a different context.<br>"
+    }
+
 
     if (error_text.length > 0) {
         d3.select("#errorText").html(error_text);
@@ -534,9 +795,7 @@ function updateTable() {
 
     });
     
-    
     return false;
-
 }
 
 function generatePDF(data, filters, bubbleIdx) {
@@ -546,8 +805,8 @@ function generatePDF(data, filters, bubbleIdx) {
     pdf.setFont("helvetica");
     pdf.setFontType("bold");
     pdf.setTextColor(0, 0, 0);
-    pdf.setFontSize(20);
-    pdf.text(10, 25, "MIT GOV/LAB Information and Government Accountability Lit. Review");
+    pdf.setFontSize(17);
+    pdf.text(10, 25, "MIT GOV/LAB Accountability Lit. Review");
 
     pdf.setFont("helvetica");
     pdf.setFontType("normal");
@@ -602,11 +861,11 @@ function generatePDF(data, filters, bubbleIdx) {
 
                 pdf.setFont("helvetica");
                 pdf.setFontType("bold");
-                pdf.text(15, 45+yOffset, filterNames[i]+"? ");
+                pdf.text(15, 45+yOffset, FILTER_NAMES[i]+"? ");
 
                 filterText = "";
                 for (j=0; j < CURR_FILTER_VALS[i].length; j++) {
-                    filterText += filterValues[i][j+1];
+                    filterText += FILTER_VALUES[i][j+1];
                     if (j != CURR_FILTER_VALS[i].length-1) {
                         filterText += ", ";
                     }
@@ -629,13 +888,13 @@ function generatePDF(data, filters, bubbleIdx) {
     pdf.setFontType("bold");
     pdf.text(15, 45+yOffset, "information provided: ");
     pdf.setFontType("italic");
-    pdf.text(80, 45+yOffset, rowNames[rows.indexOf(data["row"])]);
+    pdf.text(80, 45+yOffset, ROW_NAMES[ROWS.indexOf(data["row"])]);
     yOffset += 5;
 
     pdf.setFontType("bold");
     pdf.text(15, 45+yOffset, "outcomes measured: ");
     pdf.setFontType("italic");
-    pdf.text(80, 45+yOffset, colNames[cols.indexOf(data["col"])]);
+    pdf.text(80, 45+yOffset, COL_NAMES[COLS.indexOf(data["col"])]);
     yOffset += 5;
 
     var uniq_studies = data.studies;
@@ -693,4 +952,6 @@ function generatePDF(data, filters, bubbleIdx) {
 
     pdf.save();
 }
+
+
 

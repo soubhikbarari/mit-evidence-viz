@@ -24,6 +24,10 @@ th {
   font-size: 10pt;
 }
 
+/*.tooltip-inner {
+    text-align: left;
+}
+*/
 
 /* Creates a small triangle extender for the tooltip */
 .d3-tip:after {
