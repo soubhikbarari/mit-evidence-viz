@@ -172,7 +172,6 @@ $(document).ready(function() {
     onCountryInputUpdates();
     onPrincipalAndAgentUpdates();
     onSimilarCountrySlidersUpdates();
-    onStudyCriteriaInputUpdates();
 
 });
 
@@ -302,9 +301,9 @@ function initTable(){
         // console.log(uniq_studies);
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h4><b>" + N + "</b> unique study:</h4>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> total study:</h4>");  
         } else {
-            d3.select("#numStudies").html("<h4><b>" + N + "</b> unique studies:</h4>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> total studies:</h4>");  
         }
     });
 
@@ -315,10 +314,10 @@ function initTable(){
 function initButtons() {
     $(".alert").hide();
     $('#showFormBtn').click(function() {
-        if (document.getElementById("showFormBtn").innerHTML == "Show filter menu"){
-            $("#showFormBtn").text('Hide filter menu');
+        if (document.getElementById("showFormBtn").innerHTML == "Show query menu"){
+            $("#showFormBtn").text('Hide query menu');
         } else {
-            $("#showFormBtn").text('Show filter menu');
+            $("#showFormBtn").text('Show query menu');
         }
         
     });
@@ -336,9 +335,6 @@ function initToolTips(){
 | LISTENERS  |
 ------------*/
 
-function onStudyCriteriaInputUpdates() {
-
-}
 
 function onRegionInputUpdates() {
 
@@ -433,6 +429,17 @@ function onSimilarCountrySlidersUpdates() {
 | UPDATE/ACTION FXNS |
 --------------------*/
 
+function clearContextFilters() {
+
+    document.getElementById("country").value   = "Any";
+    document.getElementById("region").value    = "Any";
+    document.getElementById("principal").value = "Any";
+    document.getElementById("agent").value     = "Any";
+    updatePartialFilterNumStudiesDisplay("Any", "Any", "Any", "Any");
+    updateSimilaritySliderOuterDisplay("Any", "Any", "Any", "Any");
+
+}
+
 
 function updatePartialFilterNumStudiesDisplay(region, country, principal, agent) {
     // update the block of text that shows the number of studies
@@ -463,16 +470,21 @@ function updatePartialFilterNumStudiesDisplay(region, country, principal, agent)
 
         PARTIAL_STUDY_COUNT = relevant_studies.length;
 
+        if ( country == "Any" && region == "Any" ) {
+            // 'any' is selected in both region and country fields
+            document.getElementById("totalStudiesText").innerHTML = "";
+        }
+
         if (PARTIAL_STUDY_COUNT == 0) {
 
-            if ( selected_country == "Any" && selected_region != "Any" ) {
+            if ( country == "Any" && region != "Any" ) {
                 // user is selecting a region without any studies
 
-               document.getElementById("totalStudiesText").innerHTML = "<b>"+PARTIAL_STUDY_COUNT+"<i></b> total studies found for selected regional context. Please specify a different context.</i>";
+                document.getElementById("totalStudiesText").innerHTML = "<b>"+PARTIAL_STUDY_COUNT+"<i></b> total studies found for selected regional context. Please specify a different context.</i>";
                 document.getElementById("similaritySliderTitle").innerHTML = "Select other contextually similar countries of study:";
 
             } 
-            if ( selected_country != "Any" ) {
+            if ( country != "Any" ) {
                 // user is selecting a country without any studies
 
                document.getElementById("totalStudiesText").innerHTML = "<b>"+PARTIAL_STUDY_COUNT+"<i></b> total studies found for selected country context. Please specify a different context or a search range for similar countries (with available studies) below.</i>";
@@ -485,10 +497,10 @@ function updatePartialFilterNumStudiesDisplay(region, country, principal, agent)
             }
 
         } else {
-            if ( selected_country != "Any" ) {
+            if ( country != "Any" ) {
                 document.getElementById("totalStudiesText").innerHTML = "<i><b>"+PARTIAL_STUDY_COUNT+"</b> total studies found for selected country context.</i>";
             } 
-            if ( selected_region != "Any" ) {
+            if ( region != "Any" ) {
                 document.getElementById("totalStudiesText").innerHTML = "<i><b>"+PARTIAL_STUDY_COUNT+"</b> total studies found for selected regional context.</i>";   
             }
 
@@ -517,9 +529,9 @@ function updateSimilaritySliderOuterDisplay(region, country, principal, agent) {
         else if (principal == agent || principal == "Any" || agent == "Any" || principal == "Other" || agent == "Other" ) {
             //// use only a single distance metric
             single_actor = (principal == "Any" || principal == "Other") ? agent : principal;
-            document.getElementById("sliderStatement").innerHTML = "most contextually similar countries in the behavior of <code>"+single_actor+"</code>";
+            document.getElementById("sliderStatement").innerHTML = "most contextually similar countries (with available studies) regarding the behavior of <code>"+single_actor+"</code>";
         } else {
-            document.getElementById("sliderStatement").innerHTML = "most contextually similar countries in the behavior of <code>"+principal+"</code> and <code>"+agent+"</code>";
+            document.getElementById("sliderStatement").innerHTML = "most contextually similar countries (with available studies) regarding the behavior of <code>"+principal+"</code> and <code>"+agent+"</code>";
         }
 
         //// update tooltip
@@ -761,12 +773,10 @@ function updateTable() {
     $('.alert').hide();
 
 
-
     d3.csv(CSV_FILE_LOC, function(data){
         flt_data = filterCsvData(data);
         new_data = formatCsvData(flt_data);
 
-        
         d3.select("body")
             .selectAll("circle")
             .data(new_data)
@@ -786,9 +796,9 @@ function updateTable() {
         N = uniq_studies.length;
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h4><b>" + N + "</b> unique study:</h4>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> total study for query:</h4>");  
         } else {
-            d3.select("#numStudies").html("<h4><b>" + N + "</b> unique studies:</h4>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> total studies for query:</h4>");  
         }
         
         // console.log(uniq_studies);
@@ -801,21 +811,34 @@ function updateTable() {
 function generatePDF(data, filters, bubbleIdx) {
     // generate PDF upon click of a specific cell in the table
     const pdf = new jsPDF(); 
+    pdf.setProperties({
+        title: 'PDF Title',
+        subject: 'Info about PDF',
+        author: 'PDFAuthor',
+        keywords: 'generated, javascript, web 2.0, ajax',
+        creator: 'My Company'
+    });
 
     pdf.setFont("helvetica");
     pdf.setFontType("bold");
     pdf.setTextColor(0, 0, 0);
-    pdf.setFontSize(17);
-    pdf.text(10, 25, "MIT GOV/LAB Accountability Lit. Review");
+    pdf.setFontSize(15);
+    pdf.text(15, 20, "MIT GOV/LAB Accountability Literature Review");
+
+    pdf.setFont("helvetica");
+    pdf.setFontType("normal");
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFontSize(9);
+    pdf.text(15, 25, "This document compiles all relevant literature published in the last 10 years addressing the\n effects of information on government accountability within a user-specified context. To find \n evidence for different contexts, visit our interactive web tool at the following URL:");
 
     pdf.setFont("helvetica");
     pdf.setFontType("normal");
     pdf.setTextColor(40, 82, 190);
-    pdf.setFontSize(12);
-    pdf.text(10, 33, "http://www.mitgovlab.org");
+    pdf.setFontSize(10);
+    pdf.text(15, 37, "http://www.mitgovlab.org/evidence-gap-map");
 
     pdf.setLineWidth(0.5);
-    pdf.line(10, 37, 180, 37);
+    pdf.line(15, 41, 180, 43);
 
     pdf.setFont("helvetica");
     pdf.setFontType("bold");
@@ -826,7 +849,7 @@ function generatePDF(data, filters, bubbleIdx) {
 
     pdf.setFont("helvetica");
     pdf.setFontType("bold");
-    pdf.text(10, 45, "Criteria for studies");
+    pdf.text(15, 49, "Description of studies queried");
     pdf.setFontSize(12);
 
     if (CURR_FILTER_VALS.length > 0) {
@@ -836,7 +859,7 @@ function generatePDF(data, filters, bubbleIdx) {
         if (CURR_REGION_SEL != null & CURR_REGION_SEL != "Any") {
             pdf.setFont("helvetica");
             pdf.setFontType("bold");
-            pdf.text(15, 45+yOffset, "region? ");
+            pdf.text(20, 45+yOffset, "region? ");
             pdf.setFontType("italic");
             pdf.text(80, 45+yOffset, CURR_REGION_SEL)
             yOffset += 5;
@@ -846,7 +869,7 @@ function generatePDF(data, filters, bubbleIdx) {
         if (CURR_COUNTRY_SEL != null & CURR_COUNTRY_SEL != "Any") {
             pdf.setFont("helvetica");
             pdf.setFontType("bold");
-            pdf.text(15, 45+yOffset, "country? ");
+            pdf.text(20, 45+yOffset, "country? ");
             pdf.setFontType("italic");
             pdf.text(80, 45+yOffset, CURR_COUNTRY_SEL);
             allAny = false;
@@ -861,7 +884,7 @@ function generatePDF(data, filters, bubbleIdx) {
 
                 pdf.setFont("helvetica");
                 pdf.setFontType("bold");
-                pdf.text(15, 45+yOffset, FILTER_NAMES[i]+"? ");
+                pdf.text(20, 45+yOffset, FILTER_NAMES[i]+"? ");
 
                 filterText = "";
                 for (j=0; j < CURR_FILTER_VALS[i].length; j++) {
@@ -879,20 +902,20 @@ function generatePDF(data, filters, bubbleIdx) {
 
         if (allAny) {
             pdf.setFontType("normal");
-            pdf.text(15, 45+yOffset, "(all)")
+            pdf.text(20, 45+yOffset, "(all)")
             yOffset += 5;
         }
 
     }
 
     pdf.setFontType("bold");
-    pdf.text(15, 45+yOffset, "information provided: ");
+    pdf.text(20, 45+yOffset, "information provided: ");
     pdf.setFontType("italic");
     pdf.text(80, 45+yOffset, ROW_NAMES[ROWS.indexOf(data["row"])]);
     yOffset += 5;
 
     pdf.setFontType("bold");
-    pdf.text(15, 45+yOffset, "outcomes measured: ");
+    pdf.text(20, 45+yOffset, "outcomes measured: ");
     pdf.setFontType("italic");
     pdf.text(80, 45+yOffset, COL_NAMES[COLS.indexOf(data["col"])]);
     yOffset += 5;
@@ -901,21 +924,25 @@ function generatePDF(data, filters, bubbleIdx) {
     N = uniq_studies.length;
 
     if (N == 1) {
-        var study_num = N+" result";
+        var study_num = N+" relevant study";
     } else {
-        var study_num = N+" results";
+        var study_num = N+" relevant studies";
     }
 
     pdf.setFontType("bold");
     pdf.setFontSize(14);
-    pdf.text(10, 50+yOffset, study_num);
+    pdf.text(15, 50+yOffset, study_num);
+    pdf.setFontSize(9);
+    pdf.setFontType("normal");
+    pdf.text(15, 55+yOffset, "(click on URL to open hyperlink)");
 
-    var ypos = 45+yOffset+10;
+    var ypos = 45+yOffset+14;
     var studytext = "";
     pdf.setFont("helvetica");
-    pdf.setFontType("normal");
-    pdf.setFontSize(12);
+    pdf.setFontSize(11);
     pdf.page = 1;
+    pdf.setLineWidth(0.5);
+    pdf.line(15, 275, 180, 275);
     pdf.text(180, 285, "page "+pdf.page);
 
 
@@ -932,15 +959,26 @@ function generatePDF(data, filters, bubbleIdx) {
         studytext += "\nURL:  " + uniq_studies[i].URL;
 
         studytext += "\n\n\n";
+        pdf.setFontSize(11);
 
         if (i == uniq_studies.length-1){
-            pdf.text(10, ypos, pdf.splitTextToSize(studytext, 150));
+            pdf.text(15, ypos, pdf.splitTextToSize(studytext, 150));
         }
 
         if (i % 2 == 1 & i != uniq_studies.length-1) {
-            pdf.text(10, ypos, pdf.splitTextToSize(studytext, 150));
+            pdf.text(15, ypos, pdf.splitTextToSize(studytext, 150));
             pdf.addPage();
             pdf.page++;
+            // header
+            pdf.setFontType("bold");
+            pdf.text(15, 20, "MIT GOV/LAB Accountability Literature Review");
+            pdf.setLineWidth(0.5);
+            pdf.line(15, 25, 180, 25);
+            // footer
+            pdf.setLineWidth(0.3);
+            pdf.line(15, 275, 180, 275);
+            pdf.setFontSize(9);
+            pdf.setFontType("normal");
             pdf.text(180, 285, "page "+pdf.page);
     
             studytext = "";
