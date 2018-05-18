@@ -62,7 +62,7 @@
         </p>
 
     <br>
-    <p style="font-size:12pt"><b>Query</b> for different study criteria. <b>Hover</b> over resulting cells in table below to view details. <b>Click</b> on cell for PDF summary.</p>
+    <p style="font-size:12pt"><b>Query</b> for different study criteria. <b>Hover</b> over resulting cells in table below to view details. <b>Click</b> on cell to download PDF summary.</p>
 
 
     <hr>
@@ -79,17 +79,112 @@
 
         <form id="updateForm" onsubmit="return updateTable();">
       
-            <h3 style="color:gray">Select context for your project:
-                <span   class="glyphicon glyphicon-info-sign" 
+            <h3 style="color:gray">Select context for your project:&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign" 
                         style="font-size:10pt; color:grey;"
                         data-toggle="tooltip" 
                         data-placement="bottom"
                         data-html="true" 
-                        data-title="<h5><br>Choose either a geographic <b>region</b> <i>or</i> a specific <b>country</b> of interest. Additionally, specify whose behavior you want to change (<b>agent</b>) and who will be acting to create that change (<b>principal</b>).<br><br></h5>">
+                        data-title="<h5><br>Specify who will be acting to create change (<b>principal</b>) and whose behavior you want to change (<b>agent</b>). Additionally, choose either a geographic <b>region</b> <i>or</i> a specific <b>country</b> of interest.<br><br></h5>">
                 </span>
                 <button class="btn btn-secondary btn-sm" id="clearContext" onclick="clearContextFilters()">Clear
                 </button>
             </h3><br>
+
+            <div>
+                <div class="form-group" style="font-size:11pt;">
+                    <label for="principal" style="color:black"><b>Who is doing the change? (Principal)</b></label><br>
+                    <select class="form-control" style="height:30px; font-size:11pt;" id="principal">
+                      <option selected>Any</option>
+                      <option>Citizens</option>
+                      <option>Politicians</option>
+                      <option>Bureaucrats</option>
+                      <option>Judicial body</option>
+                      <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="font-size:11pt;">
+                    <label for="agent" style="color:black"><b>Whose behavior do you want to change? (Agent)</b></label><br>
+                    <select class="form-control" style="height:30px; font-size:11pt;" id="agent">
+                      <option selected>Any</option>
+                      <option>Politicians</option>
+                      <option>Bureaucrats</option>
+                      <option>Judicial body</option>
+                      <option>Other</option>
+                    </select>
+                </div>
+
+
+<!--                 <div class="form-group" style="font-size:11pt;">
+                    <label for="region" style="color:black"><b>Region</b></label><br>
+                    <select class="form-control" style="height:30px; font-size:11pt;" id="region">
+                      <option selected>Any</option>
+                    </select>
+                </div> 
+-->
+
+
+                <div class="form-group" style="font-size:11pt;">
+                    <label for="country" style="color:black"><b>Country</b></label><br>
+                    <select class="form-control" style="height:30px; font-size:11pt;" id="country">
+                      <option selected>Any</option>
+                    </select>
+                </div>
+            </div>
+
+
+<!--             <div class="form-group row" style="margin-top:0px;">
+                <div class="form-group col-3" style="font-size:11pt;">
+                    <label class="mr-sm-2" for="region"><b>Region</b></label><br>
+                    <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="region">
+                        <option selected>Any</option>
+                    </select>
+                </div>
+                <div class="form-group col-3" style="font-size:11pt;">
+                    <label class="mr-sm-2" for="country"><b>Country</b></label><br>
+                    <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="country">
+                      <option selected>Any</option>
+                    </select>
+                </div>
+            </div> 
+-->
+
+
+<!--   <div class="form-group">
+    <label for="exampleFormControlSelect2">Example multiple select</label>
+    <select multiple class="form-control" id="exampleFormControlSelect2">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
+  </div> 
+  -->
+
+
+
+
+  <!--           <div class="form-group" style="font-size:11pt;">
+                <label class="mr-sm-2" for="principal"><b>Who is doing the change? (Principal)</b></label><br>
+                <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="principal">
+                  <option selected>Any</option>
+                  <option>Citizens</option>
+                  <option>Politicians</option>
+                  <option>Bureaucrats/Judicial body</option>
+                  <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="font-size:11pt;">
+                <label class="mr-sm-12" for="agent"><b>Whose behavior do you want to change? (Agent)</b></label><br>
+                <select class="custom-select mb-12 mr-sm-12 mb-sm-12" style="height:30px;" id="agent">
+                  <option selected>Any</option>
+                  <option>Politicians</option>
+                  <option>Bureaucrats/Judicial body</option>
+                  <option>Other</option>
+                </select>
+            </div>
 
             <div class="form-group row" style="margin-top:0px;">
                 <div class="form-group col-3" style="font-size:11pt;">
@@ -104,26 +199,7 @@
                       <option selected>Any</option>
                     </select>
                 </div>
-                <div class="form-group col-3" style="font-size:11pt;">
-                    <label class="mr-sm-2" for="principal"><b>Principal</b></label><br>
-                    <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="principal">
-                      <option selected>Any</option>
-                      <option>Citizens</option>
-                      <option>Politicians</option>
-                      <option>Bureaucrats/Judicial body</option>
-                      <option>Other</option>
-                    </select>
-                </div>
-                <div class="form-group col-3" style="font-size:11pt;">
-                    <label class="mr-sm-2" for="agent"><b>Agent</b></label><br>
-                    <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="agent">
-                      <option selected>Any</option>
-                      <option>Politicians</option>
-                      <option>Bureaucrats/Judicial body</option>
-                      <option>Other</option>
-                    </select>
-                </div>
-            </div>
+            </div> -->
 
             <div class="collapse" id="totalStudiesDiv">
                 <h4 id="totalStudiesText"></h4>
@@ -174,10 +250,80 @@
 
             <div class="row">
 
+
+
+                <div class="col col-4">
+                    <div class="form-group" style="font-size:11pt;">
+                            
+                        <label><b>Sector</b></label><br>
+
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios1" value="0" checked>
+                                    Any
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios2" value="2">
+                                    Education
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios4" value="4">
+                                    Entitlements
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios3" value="3">
+                                    Health
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios5" value="5">
+                                    Other
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-4">
+                    <div class="form-group" style="font-size:11pt;">
+                        <label><b>Is the setting urban, rural, or peri-urban?</b></label><br>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="0" checked>
+                                    Any
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="1">
+                                    Urban
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios2" value="2">
+                                    Rural
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios3" value="3">
+                                    Peri-urban
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col col-4">
                     <div class="form-group" style="font-size:11pt;">
                             <label >
-                                <b>Delivery mode</b>
+                                <b>Information delivery mode</b>
                             </label><br>
 
                         <div class="form-check">
@@ -206,51 +352,13 @@
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="5">
-                                    Other
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
                                 <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="6">
-                                    FOIA
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col col-4">
-                    <div class="form-group" style="font-size:11pt;">
-                            
-                        <label><b>Sector</b></label><br>
-
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios1" value="0" checked>
-                                    Any
+                                    Information request
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios2" value="2">
-                                    Education
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios3" value="3">
-                                    Health
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios4" value="4">
-                                    Entitlements
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios5" value="5">
+                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="5">
                                     Other
                             </label>
                         </div>
@@ -332,50 +440,20 @@
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="1">
-                                    National
+                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios3" value="3">
+                                    Local / Municipal
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios2" value="2">
-                                    Intermediate (state, provincial, etc.)
+                                    Province / State
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios3" value="3">
-                                    Local
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col col-4">
-                    <div class="form-group" style="font-size:11pt;">
-                        <label><b>Is the setting urban, rural, or peri-urban?</b></label><br>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="0" checked>
-                                    Any
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="1">
-                                    Urban
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios2" value="2">
-                                    Rural
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios3" value="3">
-                                    Peri-urban
+                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="1">
+                                    National
                             </label>
                         </div>
                     </div>

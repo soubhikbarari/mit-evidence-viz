@@ -91,14 +91,14 @@ var FILTER_VALUES = [
         "Trainings",
         "Media campaign",
         "Pamphlets or letters",
+        "FOIA",
         "Other",
-        "FOIA"
     ],
     [
         "Any",
         "Education",
-        "Health",
         "Entitlements",
+        "Health",
         "Other"
     ],
     [
@@ -129,7 +129,7 @@ var FILTER_VALUES = [
         "Citizens",
         "Politicians",
         "Bureaucrats/Judicial body",
-        "Bureaucrats/Judicial body",
+        // "Bureaucrats/Judicial body",
         "Other"
     ],
     [
@@ -137,7 +137,7 @@ var FILTER_VALUES = [
         "Citizens",
         "Politicians",
         "Bureaucrats/Judicial body",
-        "Bureaucrats/Judicial body",
+        // "Bureaucrats/Judicial body",
         "Other"
     ]
 ]
@@ -183,9 +183,9 @@ function initFilters() {
 
     d3.csv(CSV_FILE_LOC, function(data) {
 
-        AVLBL_REGION = data.map(function(d){ return d.region; })
-                           .reduce(function(p, v){ return p.indexOf(v) == -1 ? p.concat(v) : p; }, [])
-                            .filter(function(d){ return (d !== "NA"); });
+        // AVLBL_REGION = data.map(function(d){ return d.region; })
+        //                    .reduce(function(p, v){ return p.indexOf(v) == -1 ? p.concat(v) : p; }, [])
+        //                     .filter(function(d){ return (d !== "NA"); });
 
         AVLBL_COUNTRY = data.map(function(d){ return d.country; })
                             .reduce(function(p, v){ return p.indexOf(v) == -1 ? p.concat(v) : p; }, [])
@@ -341,13 +341,25 @@ function onRegionInputUpdates() {
     $("#region").on("change", function() {
 
         selected_country   = document.getElementById("country").value;
-        selected_region    = document.getElementById("region").value;
+        // >>>>>>>>>>
+        // selected_region    = document.getElementById("region").value;
+        // ==========
+        selected_region = null;
+        // <<<<<<<<<<
         selected_principal = document.getElementById("principal").value;
         selected_agent     = document.getElementById("agent").value;
 
         if (selected_country != "Any") {
             document.getElementById("country").value = "Any";
             selected_country = "Any";
+        }
+
+        if ((selected_principal == "Bureaucrats") | (selected_principal == "Judicial body")) {
+            selected_principal = "Bureaucrats/Judicial body";
+        }
+
+        if ((selected_agent == "Bureaucrats") | (selected_agent == "Judicial body")) {
+            selected_agent = "Bureaucrats/Judicial body";
         }
 
         updatePartialFilterNumStudiesDisplay(selected_region, selected_country, selected_principal, selected_agent);
@@ -365,14 +377,18 @@ function onCountryInputUpdates() {
     $("#country").on("change", function() {
 
         selected_country   = document.getElementById("country").value;
-        selected_region    = document.getElementById("region").value;
+        // >>>>>>>>>>
+        // selected_region    = document.getElementById("region").value;
+        // ==========
+        selected_region = null;
+        // <<<<<<<<<<        
         selected_principal = document.getElementById("principal").value;
         selected_agent     = document.getElementById("agent").value;
 
-        if (selected_country != "Any") {
-            document.getElementById("region").value = "Any";
-            selected_region = "Any";
-        }
+        // if (selected_country != "Any") {
+        //     document.getElementById("region").value = "Any";
+        //     selected_region = "Any";
+        // }
 
         updatePartialFilterNumStudiesDisplay(selected_region, selected_country, selected_principal, selected_agent);
 
@@ -388,9 +404,21 @@ function onPrincipalAndAgentUpdates() {
     $("#principal").on("change", function() {
 
         selected_country   = document.getElementById("country").value;
-        selected_region    = document.getElementById("region").value;
+        // >>>>>>>>>>
+        // selected_region    = document.getElementById("region").value;
+        // ==========
+        selected_region = null;
+        // <<<<<<<<<<
         selected_principal = document.getElementById("principal").value;
         selected_agent     = document.getElementById("agent").value;
+
+        if ((selected_principal == "Bureaucrats") | (selected_principal == "Judicial body")) {
+            selected_principal = "Bureaucrats/Judicial body";
+        }
+
+        if ((selected_agent == "Bureaucrats") | (selected_agent == "Judicial body")) {
+            selected_agent = "Bureaucrats/Judicial body";
+        }
         
         updatePartialFilterNumStudiesDisplay(selected_region, selected_country, selected_principal, selected_agent);
 
@@ -400,9 +428,21 @@ function onPrincipalAndAgentUpdates() {
 
     $("#agent").on("change", function() {
         selected_country   = document.getElementById("country").value;
-        selected_region    = document.getElementById("region").value;
+        // >>>>>>>>>>
+        // selected_region    = document.getElementById("region").value;
+        // ==========
+        selected_region = null;
+        // <<<<<<<<<<
         selected_principal = document.getElementById("principal").value;
         selected_agent     = document.getElementById("agent").value;
+
+        if ((selected_principal == "Bureaucrats") | (selected_principal == "Judicial body")) {
+            selected_principal = "Bureaucrats/Judicial body";
+        }
+
+        if ((selected_agent == "Bureaucrats") | (selected_agent == "Judicial body")) {
+            selected_agent = "Bureaucrats/Judicial body";
+        }
 
         updatePartialFilterNumStudiesDisplay(selected_region, selected_country, selected_principal, selected_agent);
 
@@ -417,9 +457,18 @@ function onSimilarCountrySlidersUpdates() {
 
     $("#similaritySlider").on("mousemove", function() {
         n = parseInt($("#similaritySlider").val(), 10);
-        selected_country = document.getElementById("country").value;
+        selected_country   = document.getElementById("country").value;
         selected_principal = document.getElementById("principal").value;
         selected_agent     = document.getElementById("agent").value;
+
+        if ((selected_principal == "Bureaucrats") | (selected_principal == "Judicial body")) {
+            selected_principal = "Bureaucrats/Judicial body";
+        }
+
+        if ((selected_agent == "Bureaucrats") | (selected_agent == "Judicial body")) {
+            selected_agent = "Bureaucrats/Judicial body";
+        }
+
         updateSimilaritySlider(n, selected_country, selected_principal, selected_agent);
     });
 
@@ -432,7 +481,7 @@ function onSimilarCountrySlidersUpdates() {
 function clearContextFilters() {
 
     document.getElementById("country").value   = "Any";
-    document.getElementById("region").value    = "Any";
+    // document.getElementById("region").value    = "Any";
     document.getElementById("principal").value = "Any";
     document.getElementById("agent").value     = "Any";
     updatePartialFilterNumStudiesDisplay("Any", "Any", "Any", "Any");
@@ -453,7 +502,10 @@ function updatePartialFilterNumStudiesDisplay(region, country, principal, agent)
         var relevant_studies = data.filter(function(d) {
 
             if (
-                    (d["country"] == country || d["region"] == region) 
+                    (
+                        d["country"] == country 
+                        // || d["region"] == region
+                    ) 
                     & 
                     ( // study matches users' desired principal
                         principal_vidxs.indexOf(parseInt(d["principal"], 10)) != -1 || principal == "Any" 
@@ -470,20 +522,26 @@ function updatePartialFilterNumStudiesDisplay(region, country, principal, agent)
 
         PARTIAL_STUDY_COUNT = relevant_studies.length;
 
-        if ( country == "Any" && region == "Any" ) {
+        if ( 
+                country == "Any" 
+                // && region == "Any" 
+            ) {
             // 'any' is selected in both region and country fields
             document.getElementById("totalStudiesText").innerHTML = "";
         }
 
         if (PARTIAL_STUDY_COUNT == 0) {
 
-            if ( country == "Any" && region != "Any" ) {
-                // user is selecting a region without any studies
+            // if ( 
+            //         country == "Any" 
+            //         // && region != "Any" 
+            //     ) {
+            //     // user is selecting a region without any studies
 
-                document.getElementById("totalStudiesText").innerHTML = "<b>"+PARTIAL_STUDY_COUNT+"<i></b> total studies found for selected regional context. Please specify a different context.</i>";
-                document.getElementById("similaritySliderTitle").innerHTML = "Select other contextually similar countries of study:";
+            //     document.getElementById("totalStudiesText").innerHTML = "<b>"+PARTIAL_STUDY_COUNT+"<i></b> total studies found for selected regional context. Please specify a different context.</i>";
+            //     document.getElementById("similaritySliderTitle").innerHTML = "Select other contextually similar countries of study:";
 
-            } 
+            // } 
             if ( country != "Any" ) {
                 // user is selecting a country without any studies
 
@@ -500,9 +558,9 @@ function updatePartialFilterNumStudiesDisplay(region, country, principal, agent)
             if ( country != "Any" ) {
                 document.getElementById("totalStudiesText").innerHTML = "<i><b>"+PARTIAL_STUDY_COUNT+"</b> total studies found for selected country context.</i>";
             } 
-            if ( region != "Any" ) {
-                document.getElementById("totalStudiesText").innerHTML = "<i><b>"+PARTIAL_STUDY_COUNT+"</b> total studies found for selected regional context.</i>";   
-            }
+            // if ( region != "Any" ) {
+            //     document.getElementById("totalStudiesText").innerHTML = "<i><b>"+PARTIAL_STUDY_COUNT+"</b> total studies found for selected regional context.</i>";   
+            // }
 
             document.getElementById("similaritySliderTitle").innerHTML = "Select additional contextually similar countries of study (optional):";
         }
@@ -623,7 +681,14 @@ function collectUserFilters() {
             //// principal/agent is selected using a dropdown
             //// so slightly different collection process
             var filter = FILTERS[i];
-            filter_vals.push([FILTER_VALUES[i].indexOf(document.getElementById(filter).value)]);
+            var value = document.getElementById(filter).value;
+
+            if ((value == "Bureaucrats") | (value == "Judicial body")) {
+                value = "Bureaucrats/Judicial body";
+            }
+
+            filter_vals.push([FILTER_VALUES[i].indexOf(value)]);
+        
 
         } else {
 
@@ -650,15 +715,16 @@ function filterCsvData(data) {
 
     //// collect main geographic area
     CURR_COUNTRY_SEL = document.getElementById("country").value;
-    CURR_REGION_SEL = document.getElementById("region").value;
+    // CURR_REGION_SEL = document.getElementById("region").value;
 
     if (CURR_COUNTRY_SEL != "Any") {
         var loc_filter = "country";
         var loc_value = CURR_COUNTRY_SEL;
-    } else if (CURR_REGION_SEL != "Any") {
-        var loc_filter = "region";
-        var loc_value = CURR_REGION_SEL;
     }
+    // else if (CURR_REGION_SEL != "Any") {
+    //     var loc_filter = "region";
+    //     var loc_value = CURR_REGION_SEL;
+    // }
 
     // apply user inputs
     var flt_data = data.filter(function(d) {
@@ -690,7 +756,11 @@ function filterCsvData(data) {
 
         }
 
-        if (!(CURR_COUNTRY_SEL == "Any" &&  CURR_REGION_SEL == "Any" )) { 
+        if (
+            !(
+                CURR_COUNTRY_SEL == "Any" 
+            // &&  CURR_REGION_SEL == "Any" 
+            )) { 
 
             if ( !(CURR_COUNTRY_SEL == "Any") && (ADDTNL_COUNTRY.length != 0 )) {
                 // return this country if it's in our list of 
@@ -753,7 +823,7 @@ function updateTable() {
         }
     }
     CURR_COUNTRY_SEL = document.getElementById("country").value;
-    CURR_REGION_SEL = document.getElementById("region").value;
+    // CURR_REGION_SEL = document.getElementById("region").value;
 
     if ( ADDTNL_COUNTRY.length == 0 && AVLBL_COUNTRY.indexOf(CURR_COUNTRY_SEL) == -1 && CURR_COUNTRY_SEL != "Any" ) {
         error_text += "- Context is missing information. Please select at least one <strong>country</strong> with available studies or a specific <strong>region</strong>.<br>";
@@ -856,15 +926,15 @@ function generatePDF(data, filters, bubbleIdx) {
 
         allAny = true;
 
-        if (CURR_REGION_SEL != null & CURR_REGION_SEL != "Any") {
-            pdf.setFont("helvetica");
-            pdf.setFontType("bold");
-            pdf.text(20, 45+yOffset, "region? ");
-            pdf.setFontType("italic");
-            pdf.text(80, 45+yOffset, CURR_REGION_SEL)
-            yOffset += 5;
-            allAny = false;
-        }
+        // if (CURR_REGION_SEL != null & CURR_REGION_SEL != "Any") {
+        //     pdf.setFont("helvetica");
+        //     pdf.setFontType("bold");
+        //     pdf.text(20, 45+yOffset, "region? ");
+        //     pdf.setFontType("italic");
+        //     pdf.text(80, 45+yOffset, CURR_REGION_SEL)
+        //     yOffset += 5;
+        //     allAny = false;
+        // }
 
         if (CURR_COUNTRY_SEL != null & CURR_COUNTRY_SEL != "Any") {
             pdf.setFont("helvetica");
