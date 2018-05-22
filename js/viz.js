@@ -45,22 +45,22 @@ var ROWS = [
 ];
 
 var ROW_NAMES = [
-    "Accountability actors' avenues of redress",
-    "Service providers' duties and obligations",
-    "Accountability actors' civic duties",
-    "Inputs available to service providers",
-    "Service providers' level of effort",
-    "Outputs/outcomes produced by providers"
+    "Redress mechanisms",
+    "Government duties and obligations",
+    "Civic duties and responsibilties",
+    "Government resources",
+    "Government effort",
+    "Government services"
 ];
 
 var COL_NAMES =[
-    "Knowledge of how to monitor agents",
-    "Knowledge of how to sanction agents",
-    "Monitoring of agents",
-    "Sanctioning of agents",
-    "Providers' level of effort",
-    "Providers' level of corruption",
-    "Outputs",
+    "Knowledge of how to government",
+    "Knowledge of how to government",
+    "Monitoring of government",
+    "Sanctioning of government",
+    "Government effort",
+    "Government corruption",
+    "Government services",
     "Development outcomes"
 ];
 
@@ -301,9 +301,9 @@ function initTable(){
         // console.log(uniq_studies);
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h4><b>" + N + "</b> total study:</h4>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> total study (click on a circle to download a report of the papers and summaries):</h4>");  
         } else {
-            d3.select("#numStudies").html("<h4><b>" + N + "</b> total studies:</h4>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> total studies (click on a circle to download a report of the papers and summaries):</h4>");  
         }
     });
 
@@ -539,14 +539,14 @@ function updatePartialFilterNumStudiesDisplay(region, country, principal, agent)
             //     // user is selecting a region without any studies
 
             //     document.getElementById("totalStudiesText").innerHTML = "<b>"+PARTIAL_STUDY_COUNT+"<i></b> total studies found for selected regional context. Please specify a different context.</i>";
-            //     document.getElementById("similaritySliderTitle").innerHTML = "Select other contextually similar countries of study:";
+            //     document.getElementById("similaritySliderTitle").innerHTML = "Select other contextually comparable countries of study:";
 
             // } 
             if ( country != "Any" ) {
                 // user is selecting a country without any studies
 
-               document.getElementById("totalStudiesText").innerHTML = "<b>"+PARTIAL_STUDY_COUNT+"<i></b> total studies found for selected country context. Please specify a different context or a search range for similar countries (with available studies) below.</i>";
-                document.getElementById("similaritySliderTitle").innerHTML = "Select other contextually similar countries of study:";
+               document.getElementById("totalStudiesText").innerHTML = "<b>"+PARTIAL_STUDY_COUNT+"<i></b> total studies found for selected context. Please specify a different context or a search range for similar countries to your selected country (with available studies) below.</i>";
+                document.getElementById("similaritySliderTitle").innerHTML = "Expand your search to studies from comparable country contexts:";
 
                 //// have the similarity slider, by default, be set to 1
                 document.getElementById("similaritySlider").value = 1;
@@ -556,13 +556,13 @@ function updatePartialFilterNumStudiesDisplay(region, country, principal, agent)
 
         } else {
             if ( country != "Any" ) {
-                document.getElementById("totalStudiesText").innerHTML = "<i><b>"+PARTIAL_STUDY_COUNT+"</b> total studies found for selected country context.</i>";
+                document.getElementById("totalStudiesText").innerHTML = "<i><b>"+PARTIAL_STUDY_COUNT+"</b> total studies found for selected context.</i>";
             } 
             // if ( region != "Any" ) {
             //     document.getElementById("totalStudiesText").innerHTML = "<i><b>"+PARTIAL_STUDY_COUNT+"</b> total studies found for selected regional context.</i>";   
             // }
 
-            document.getElementById("similaritySliderTitle").innerHTML = "Select additional contextually similar countries of study (optional):";
+            document.getElementById("similaritySliderTitle").innerHTML = "Expand your search to studies from comparable country contexts (optional):";
         }
 
         $("#totalStudiesDiv").show();
@@ -581,15 +581,15 @@ function updateSimilaritySliderOuterDisplay(region, country, principal, agent) {
         $("#similaritySliderBlock").show();
 
         if ((principal == "Any" && agent == "Any") || (principal == "Any" && agent == "Other") || (principal == "Other" && agent == "Any") || (principal == "Other" && agent == "Other")) {
-            document.getElementById("sliderStatement").innerHTML = "most contextually similar countries overall";
+            document.getElementById("sliderStatement").innerHTML = "most contextually comparable countries (with available studies) to <code>"+selected_country+"</code> overall";
         }
 
         else if (principal == agent || principal == "Any" || agent == "Any" || principal == "Other" || agent == "Other" ) {
             //// use only a single distance metric
             single_actor = (principal == "Any" || principal == "Other") ? agent : principal;
-            document.getElementById("sliderStatement").innerHTML = "most contextually similar countries (with available studies) regarding the behavior of <code>"+single_actor+"</code>";
+            document.getElementById("sliderStatement").innerHTML = "most contextually comparable countries (with available studies) to <code>"+selected_country+"</code> regarding the behavior of <code>"+single_actor+"</code>";
         } else {
-            document.getElementById("sliderStatement").innerHTML = "most contextually similar countries (with available studies) regarding the behavior of <code>"+principal+"</code> and <code>"+agent+"</code>";
+            document.getElementById("sliderStatement").innerHTML = "most contextually comparable countries (with available studies) to <code>"+selected_country+"</code> regarding the behavior of <code>"+principal+"</code> and <code>"+agent+"</code>";
         }
 
         //// update tooltip
@@ -615,7 +615,7 @@ function updateSimilaritySlider(n, country, principal, agent) {
 
 function updateSimilaritySliderFootnote(country, principal, agent) {
 
-    htmlText = "Based on your selection of <code>"+principal+"</code> as principal and <code>"+agent+"</code> as agent, countries similar to <code>"+country+"</code>are identified using the following contextual factors:<br><br>";
+    htmlText = "Based on your selection of <code>"+principal+"</code> as principal and <code>"+agent+"</code> as agent, countries comparable to <code>"+country+"</code>are identified using the following contextual factors:<br><br>";
 
     if ((principal == "Citizens" && agent == "Bureaucrats/Judicial body" ) || (agent == "Citizens" && principal == "Bureaucrats/Judicial body" )) {
         f_idxs = [1,2,3,4,6,7,8,9,10];
@@ -866,9 +866,9 @@ function updateTable() {
         N = uniq_studies.length;
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h4><b>" + N + "</b> total study for query:</h4>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> total study for query (<b>click</b> on a circle to download PDF summary of corresponding studies):</h4>");  
         } else {
-            d3.select("#numStudies").html("<h4><b>" + N + "</b> total studies for query:</h4>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> total studies for query (<b>click</b> on a circle to download PDF summary of corresponding studies):</h4>");  
         }
         
         // console.log(uniq_studies);

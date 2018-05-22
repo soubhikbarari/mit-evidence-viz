@@ -48,745 +48,792 @@
 <body>
 
 
-  <div class="container-fluid" style="overflow:hidden;">
-    <br>
-    <!-- <h1>Information and Government Accountability: A Literature Review</h1> -->
-        <p style="font-size:12pt">
-        We (<a href="http://www.mitgovlab.org" target="_blank">MIT GOV/LAB</a>) designed a 
-        systematic search system for literature published in the last 10 years addressing 
-        the effects of information on government accountability, both between 
-        government and citizens and within government. A total of 34 relevant papers 
-        were found. The table below maps the findings of the evidence base. An 
-        accompanying report reviews the literature and proposes a framework for 
-        thinking of the chain between information and accountability.
-        </p>
-
-    <br>
-    <p style="font-size:12pt"><b>Query</b> for different study criteria. <b>Hover</b> over resulting cells in table below to view details. <b>Click</b> on cell to download PDF summary.</p>
-
-
-    <hr>
-
-
-    <div class="container-fluid" style="overflow:hidden">
-
-        <div class="row">
-            <button class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#formContainer" id="showFormBtn">Show query menu</button>
-        </div>
+    <div class="container-fluid" style="overflow:hidden;">
         <br>
+        <!-- <h1>Information and Government Accountability: A Literature Review</h1> -->
+        <!--
+                 <p style="font-size:12pt">
+                We (<a href="http://www.mitgovlab.org" target="_blank">MIT GOV/LAB</a>) designed a 
+                systematic search system for literature published in the last 10 years addressing 
+                the effects of information on government accountability, both between 
+                government and citizens and within government. A total of 34 relevant papers 
+                were found. The table below maps the findings of the evidence base. An 
+                accompanying report reviews the literature and proposes a framework for 
+                thinking of the chain between information and accountability.
+                </p> 
+        -->
 
-        <div class="jumbotron collapse" id="formContainer" style="line-height: 1;">
 
-        <form id="updateForm" onsubmit="return updateTable();">
-      
-            <h3 style="color:gray">Select context for your project:&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign" 
-                        style="font-size:10pt; color:grey;"
-                        data-toggle="tooltip" 
-                        data-placement="bottom"
-                        data-html="true" 
-                        data-title="<h5><br>Specify who will be acting to create change (<b>principal</b>) and whose behavior you want to change (<b>agent</b>). Additionally, choose either a geographic <b>region</b> <i>or</i> a specific <b>country</b> of interest.<br><br></h5>">
-                </span>
-                <button class="btn btn-secondary btn-sm" id="clearContext" onclick="clearContextFilters()">Clear
-                </button>
-            </h3><br>
 
-            <div>
-                <div class="form-group" style="font-size:11pt;">
-                    <label for="principal" style="color:black"><b>Who is doing the change? (Principal)</b></label><br>
-                    <select class="form-control" style="height:30px; font-size:11pt;" id="principal">
-                      <option selected>Any</option>
-                      <option>Citizens</option>
-                      <option>Politicians</option>
-                      <option>Bureaucrats</option>
-                      <option>Judicial body</option>
-                      <option>Other</option>
-                    </select>
+        <!-- <br> -->
+        <p style="font-size:12pt"><b>Query</b> for different study criteria. <b>Hover</b> over resulting cells in table below to view details.
+
+ 
+<!-- <br>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#home"><h4>How to search <br>for relevant studies</h4></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#menu1"><h4>How to expand <br>your search to comparable studies</h4></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#menu2"><h4>How to interpret and<br>share your results</h4></a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane container active" id="home" style="font-size:11pt;"><br>
+        Which government actors do you want to hold accountable? Select different government actors in the "Whose behavior do you want to change?" and "Government level" filter. <br><br>
+
+        Who has power (or whom do you want) to hold them accountable? Select actors -- citizens, government, politicians-- in the "Who is doing the change?" filter. <br><br>
+
+        Additional filters allow you to sort by sector, urban/rural, type of information intervention, and research methods.
+
+    </div>
+    <div class="tab-pane container fade" id="menu1">...
+    </div>
+    <div class="tab-pane container fade" id="menu2">...
+    </div>
+</div>
+<br> 
+ -->
+
+<hr>
+
+
+        <div class="container-fluid" style="overflow:hidden">
+
+                <div class="row">
+                        <button class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#formContainer" id="showFormBtn">Show query menu</button>
                 </div>
+                <br>
 
-                <div class="form-group" style="font-size:11pt;">
-                    <label for="agent" style="color:black"><b>Whose behavior do you want to change? (Agent)</b></label><br>
-                    <select class="form-control" style="height:30px; font-size:11pt;" id="agent">
-                      <option selected>Any</option>
-                      <option>Politicians</option>
-                      <option>Bureaucrats</option>
-                      <option>Judicial body</option>
-                      <option>Other</option>
-                    </select>
-                </div>
+                <div class="jumbotron collapse" id="formContainer" style="line-height: 1;">
+
+                <form id="updateForm" onsubmit="return updateTable();">
+            
+                        <h3 style="color:gray">Select context for your project:&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign" 
+                                                style="font-size:10pt; color:grey;"
+                                                data-toggle="tooltip" 
+                                                data-placement="bottom"
+                                                data-html="true" 
+                                                data-title="<h5><br>Specify who will be acting to create change (<b>principal</b>) and whose behavior you want to change (<b>agent</b>). Additionally, choose either a geographic <b>region</b> <i>or</i> a specific <b>country</b> of interest.<br><br></h5>">
+                                </span>
+                                <button class="btn btn-secondary btn-sm" id="clearContext" onclick="clearContextFilters()">Clear
+                                </button>
+                        </h3><br>
+
+                        <div>
+                                <div class="form-group" style="font-size:11pt;">
+                                        <label for="principal" style="color:black"><b>Who is doing the change? (principal)</b></label><br>
+                                        <select class="form-control" style="height:30px; font-size:11pt;" id="principal">
+                                            <option selected>Any</option>
+                                            <option>Citizens</option>
+                                            <option>Politicians</option>
+                                            <option>Bureaucrats</option>
+                                            <option>Judicial body</option>
+                                            <option>Other</option>
+                                        </select>
+                                </div>
+
+                                <div class="form-group" style="font-size:11pt;">
+                                        <label for="agent" style="color:black"><b>Whose behavior do you want to change? (agent)</b></label><br>
+                                        <select class="form-control" style="height:30px; font-size:11pt;" id="agent">
+                                            <option selected>Any</option>
+                                            <option>Politicians</option>
+                                            <option>Bureaucrats</option>
+                                            <option>Judicial body</option>
+                                            <option>Other</option>
+                                        </select>
+                                </div>
+
+                                <div class="form-group" style="font-size:11pt;">
+                                        <label><b>What levels of government are addressed?</b></label><br>
+                                        <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="0" checked>
+                                                                Any
+                                                </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios3" value="3">
+                                                                Local / Municipal
+                                                </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios2" value="2">
+                                                                Province / State
+                                                </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="1">
+                                                                National
+                                                </label>
+                                        </div>
+                                </div>
 
 
-<!--                 <div class="form-group" style="font-size:11pt;">
-                    <label for="region" style="color:black"><b>Region</b></label><br>
-                    <select class="form-control" style="height:30px; font-size:11pt;" id="region">
-                      <option selected>Any</option>
-                    </select>
-                </div> 
--->
-
-
-                <div class="form-group" style="font-size:11pt;">
-                    <label for="country" style="color:black"><b>Country</b></label><br>
-                    <select class="form-control" style="height:30px; font-size:11pt;" id="country">
-                      <option selected>Any</option>
-                    </select>
-                </div>
-            </div>
+                                <div class="form-group" style="font-size:11pt;">
+                                        <label for="country" style="color:black"><b>Country of interest?</b></label><br>
+                                        <select class="form-control" style="height:30px; font-size:11pt;" id="country">
+                                            <option selected>Any</option>
+                                        </select>
+                                </div>
+                        </div>
 
 
 <!--             <div class="form-group row" style="margin-top:0px;">
-                <div class="form-group col-3" style="font-size:11pt;">
-                    <label class="mr-sm-2" for="region"><b>Region</b></label><br>
-                    <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="region">
-                        <option selected>Any</option>
-                    </select>
-                </div>
-                <div class="form-group col-3" style="font-size:11pt;">
-                    <label class="mr-sm-2" for="country"><b>Country</b></label><br>
-                    <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="country">
-                      <option selected>Any</option>
-                    </select>
-                </div>
-            </div> 
+                                <div class="form-group col-3" style="font-size:11pt;">
+                                        <label class="mr-sm-2" for="region"><b>Region</b></label><br>
+                                        <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="region">
+                                                <option selected>Any</option>
+                                        </select>
+                                </div>
+                                <div class="form-group col-3" style="font-size:11pt;">
+                                        <label class="mr-sm-2" for="country"><b>Country</b></label><br>
+                                        <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="country">
+                                            <option selected>Any</option>
+                                        </select>
+                                </div>
+                        </div> 
 -->
 
 
 <!--   <div class="form-group">
-    <label for="exampleFormControlSelect2">Example multiple select</label>
-    <select multiple class="form-control" id="exampleFormControlSelect2">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5</option>
-    </select>
-  </div> 
-  -->
+        <label for="exampleFormControlSelect2">Example multiple select</label>
+        <select multiple class="form-control" id="exampleFormControlSelect2">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+    </div> 
+    -->
 
 
 
 
-  <!--           <div class="form-group" style="font-size:11pt;">
-                <label class="mr-sm-2" for="principal"><b>Who is doing the change? (Principal)</b></label><br>
-                <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="principal">
-                  <option selected>Any</option>
-                  <option>Citizens</option>
-                  <option>Politicians</option>
-                  <option>Bureaucrats/Judicial body</option>
-                  <option>Other</option>
-                </select>
-            </div>
-
-            <div class="form-group" style="font-size:11pt;">
-                <label class="mr-sm-12" for="agent"><b>Whose behavior do you want to change? (Agent)</b></label><br>
-                <select class="custom-select mb-12 mr-sm-12 mb-sm-12" style="height:30px;" id="agent">
-                  <option selected>Any</option>
-                  <option>Politicians</option>
-                  <option>Bureaucrats/Judicial body</option>
-                  <option>Other</option>
-                </select>
-            </div>
-
-            <div class="form-group row" style="margin-top:0px;">
-                <div class="form-group col-3" style="font-size:11pt;">
-                    <label class="mr-sm-2" for="region"><b>Region</b></label><br>
-                    <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="region">
-                        <option selected>Any</option>
-                    </select>
-                </div>
-                <div class="form-group col-3" style="font-size:11pt;">
-                    <label class="mr-sm-2" for="country"><b>Country</b></label><br>
-                    <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="country">
-                      <option selected>Any</option>
-                    </select>
-                </div>
-            </div> -->
-
-            <div class="collapse" id="totalStudiesDiv">
-                <h4 id="totalStudiesText"></h4>
-            </div>
-            <br><br>
-
-            <div class="collapse" id="similaritySliderBlock">
-                <h3 style="display:hidden;">
-                    <span style="color:gray" id="similaritySliderTitle">
-                        Select other contextually similar countries for your project (optional):
-                    </span>
-                    <span   class="glyphicon glyphicon-info-sign" 
-                            id="similariySliderTooltip"
-                            style="font-size:10pt; color:grey;"
-                            data-toggle="tooltip" 
-                            data-placement="bottom"
-                            data-html="true" 
-                            title="<h5><br>Countries similar to your selected <b>country</b> are identified using a set of contextual factors based on your selection of <b>principal</b> and <b>agent</b> (see footnote for details).<br><br>Use the slider to broaden or narrow the list of similar countries. Countries are displayed in order of decreasing similarity.<br><br></h5>">
-                    </span>
-                </h3>
-
-                <br>
-
-                <h5><b><span id="sliderNum">0</span></b> <span id="sliderStatement"></span><sup>1</sup><br></h5>
-                <div class="slidecontainer">
-                    <input type="range" min="0" max="10" value="0" step="1" class="slider" id="similaritySlider"><br><br>
-                </div>
-                <div class="card">
-                    <samp>
-                        <div class="card-block" id="similarCountries"></div>
-                    </samp>
-                </div>
-                <br>
-
-            </div>
-
-            <br><h3 style="color:gray">Select additional study criteria:
-            <!--
-                <span   class="glyphicon glyphicon-info-sign" 
-                        style="font-size:10pt; color:grey;"
-                        data-toggle="tooltip" 
-                        data-placement="bottom"
-                        data-html="true"
-                        data-title="<h5><br>Choose additional filters for the types of research studies to be displayed for your context.<br><br></h5>">
-                </span>
-            -->
-            </h3><br>
-
-            <div class="row">
-
-
-
-                <div class="col col-4">
-                    <div class="form-group" style="font-size:11pt;">
-                            
-                        <label><b>Sector</b></label><br>
-
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios1" value="0" checked>
-                                    Any
-                            </label>
+    <!--           <div class="form-group" style="font-size:11pt;">
+                                <label class="mr-sm-2" for="principal"><b>Who is doing the change? (Principal)</b></label><br>
+                                <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="principal">
+                                    <option selected>Any</option>
+                                    <option>Citizens</option>
+                                    <option>Politicians</option>
+                                    <option>Bureaucrats/Judicial body</option>
+                                    <option>Other</option>
+                                </select>
                         </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios2" value="2">
-                                    Education
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios4" value="4">
-                                    Entitlements
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios3" value="3">
-                                    Health
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios5" value="5">
-                                    Other
-                            </label>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col col-4">
-                    <div class="form-group" style="font-size:11pt;">
-                        <label><b>Is the setting urban, rural, or peri-urban?</b></label><br>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="0" checked>
-                                    Any
-                            </label>
+                        <div class="form-group" style="font-size:11pt;">
+                                <label class="mr-sm-12" for="agent"><b>Whose behavior do you want to change? (Agent)</b></label><br>
+                                <select class="custom-select mb-12 mr-sm-12 mb-sm-12" style="height:30px;" id="agent">
+                                    <option selected>Any</option>
+                                    <option>Politicians</option>
+                                    <option>Bureaucrats/Judicial body</option>
+                                    <option>Other</option>
+                                </select>
                         </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="1">
-                                    Urban
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios2" value="2">
-                                    Rural
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios3" value="3">
-                                    Peri-urban
-                            </label>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col col-4">
-                    <div class="form-group" style="font-size:11pt;">
-                            <label >
-                                <b>Information delivery mode</b>
-                            </label><br>
+                        <div class="form-group row" style="margin-top:0px;">
+                                <div class="form-group col-3" style="font-size:11pt;">
+                                        <label class="mr-sm-2" for="region"><b>Region</b></label><br>
+                                        <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="region">
+                                                <option selected>Any</option>
+                                        </select>
+                                </div>
+                                <div class="form-group col-3" style="font-size:11pt;">
+                                        <label class="mr-sm-2" for="country"><b>Country</b></label><br>
+                                        <select class="custom-select mb-3 mr-sm-3 mb-sm-1" style="height:30px;" id="country">
+                                            <option selected>Any</option>
+                                        </select>
+                                </div>
+                        </div> -->
 
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios1" value="0" checked>
-                                    Any
-                            </label>
+                        <div class="collapse" id="totalStudiesDiv">
+                                <h4 id="totalStudiesText"></h4>
                         </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="2">
-                                    Trainings
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="3">
-                                    Media campaign
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="4">
-                                    Pamphlets or letters
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="6">
-                                    Information request
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="5">
-                                    Other
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                        <br><br>
 
-            </div>
+                        <div class="collapse" id="similaritySliderBlock">
+                                <h3 style="display:hidden;">
+                                        <span style="color:gray" id="similaritySliderTitle">
+                                                Expand your search to studies from comparable country contexts (optional):
+                                        </span>
+                                        <span   class="glyphicon glyphicon-info-sign" 
+                                                        id="similariySliderTooltip"
+                                                        style="font-size:10pt; color:grey;"
+                                                        data-toggle="tooltip" 
+                                                        data-placement="bottom"
+                                                        data-html="true" 
+                                                        title="<h5><br>Comparable countries are calculated using 10 governance characteristics, including rule of law, economic development, strength of institutions and civic society, social capital, and regime type.<br><br>See footnote for specific characteristics that apply to your selected context.<br><br></h5>">
+                                        </span>
+                                </h3>
+
+                                <br>
+
+                                <h5><b><span id="sliderNum">0</span></b> <span id="sliderStatement"></span><span style="font-size:11pt">*</span><br></h5>
+                                <div class="slidecontainer">
+                                        <input type="range" min="0" max="10" value="0" step="1" class="slider" id="similaritySlider"><br><br>
+                                </div>
+                                <div class="card">
+                                        <samp>
+                                                <div class="card-block" id="similarCountries"></div>
+                                        </samp>
+                                </div>
+                                <br>
+
+                                <button class="btn btn-secondary btn-md" data-toggle="collapse" data-target="#footnotes" id="showFormBtn"><span style="font-size:11pt">*</span>Comparability factors &#x25BC;</button>
+                                <br><br>
+                                <div class="collapse" id="footnotes" style="line-height: 1; font-size:10pt;">
+                                        
+    <!--                   <div id="similaritySliderFootnoteTitle">
+                                                <h3><b><sup>1</sup>Contextual similarity measurement</b><br><br></h3>
+                                        </div> -->
+                                        <div id="similaritySliderFootnoteText">
+                                                <br>
+                                                Based on your selection of principal and agent, countries 
+                                                comparable to the one you choose are identified using a number of different 
+                                                contextual factors (based on data availability) including: <br><br>
+                                                <ol>    
+                                                        <li>Level of economic development</li>
+                                                        <li>Strength of rule of law</li>
+                                                        <li>Regime type</li>
+                                                        <li>Degree of corruption/clientelism</li>
+                                                        <li>Degree of procedural democracy</li>
+                                                        <li>Degree of civic space and protection for civil freedoms</li>
+                                                        <li>Strength of civil society sector and social movements</li>
+                                                        <li>Professionalization of bureaucracy/bureaucratic capacity</li>
+                                                        <li>Social capital</li>
+                                                        <li>Horizontal accountability institutions</li>
+                                                </ol>
+                                        </div>
+
+                                </div>
+
+                        </div>
+
+                        <br><h3 style="color:gray">Filter on additional study criteria:
+                        <!--
+                                <span   class="glyphicon glyphicon-info-sign" 
+                                                style="font-size:10pt; color:grey;"
+                                                data-toggle="tooltip" 
+                                                data-placement="bottom"
+                                                data-html="true"
+                                                data-title="<h5><br>Choose additional filters for the types of research studies to be displayed for your context.<br><br></h5>">
+                                </span>
+                        -->
+                        </h3><br>
+
+                        <div class="row">
 
 
-            <div class="row">
-                <div class="col col-4">
-                    <div class="form-group" style="font-size:11pt;">
-                            <label><b>What research methodology was employed?</b></label><br>
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios1" value="0" checked>
-                                Any
-                          </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="1">
-                                    Experimental
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="2">
-                                    Quasi experimental (SOO)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="3">
-                                    Quasi experimental (FE)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="4">
-                                    Quasi experimental (DiD)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="5">
-                                    Quasi experimental (RDD)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="6">
-                                    Quasi experimental (IV)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="7">
-                                    Correlational
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="8">
-                                    Qualitative case study
-                            </label>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col col-4">
-                    <div class="form-group" style="font-size:11pt;">
-                        <label><b>What level of government is addressed?</b></label><br>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="0" checked>
-                                    Any
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios3" value="3">
-                                    Local / Municipal
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios2" value="2">
-                                    Province / State
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="1">
-                                    National
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                                <div class="col-sm-3 col-xs-6">
+                                        <div class="form-group" style="font-size:11pt;">
+                                                        
+                                                <label><b>Sector</b></label><br>
 
-            </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios1" value="0" checked>
+                                                                        Any
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios2" value="2">
+                                                                        Education
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios4" value="4">
+                                                                        Entitlements
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios3" value="3">
+                                                                        Health
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios5" value="5">
+                                                                        Other
+                                                        </label>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <div class="col-sm-3 col-xs-6">
+                                        <div class="form-group" style="font-size:11pt;">
+                                                <label><b>Setting</b></label><br>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="0" checked>
+                                                                        Any
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="1">
+                                                                        Urban
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios2" value="2">
+                                                                        Rural
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios3" value="3">
+                                                                        Peri-urban
+                                                        </label>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="form-group" style="font-size:11pt;">
+                                            <label >
+                                                <b>Information delivery mode</b>
+                                            </label><br>
+
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios1" value="0" checked>
+                                                                        Any
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="2">
+                                                                        Trainings
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="3">
+                                                                        Media campaign
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="4">
+                                                                        Pamphlets or letters
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="6">
+                                                                        Information request
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios2" value="5">
+                                                                        Other
+                                                        </label>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <div class="col-sm-3 col-xs-6">
+
+                                    <div class="form-group" style="font-size:11pt;">
+                                                <label><b>Research methodology</b></label><br>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios1" value="0" checked>
+                                                                Any
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="1">
+                                                                        Experimental
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="2">
+                                                                        Quasi experimental (SOO)
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="3">
+                                                                        Quasi experimental (FE)
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="4">
+                                                                        Quasi experimental (DiD)
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="5">
+                                                                        Quasi experimental (RDD)
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="6">
+                                                                        Quasi experimental (IV)
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="7">
+                                                                        Correlational
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios2" value="8">
+                                                                        Qualitative case study
+                                                        </label>
+                                                </div>
+                                        </div>
+</div>
+                        </div>
+
+
+
 
 <!--
-            <div class="row">
-                <div class="col col-4">
-                    <div class="form-group">
-                        <label><b>Who is the principal?</b></label><br>
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios1" value="0" checked>
-                                Any
-                          </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="1">
-                                    Citizens
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="2">
-                                    Politicians
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="3">
-                                    Bureaucrats
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="4">
-                                    Judicial body
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="5">
-                                    Other
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col col-4">
-                    <div class="form-group">
-                        <label><b>Who are the agents?</b></label><br>
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios1" value="0" checked>
-                                Any
-                          </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios2" value="1">
-                                    Citizens
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios3" value="2">
-                                    Politicians
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios4" value="3">
-                                    Bureaucrats
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios5" value="4">
-                                    Judicial body
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios6" value="5">
-                                    Other
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+                                <div class="col col-4">
+                                        <div class="form-group" style="font-size:11pt;">
+                                                <label><b>What level of government is addressed?</b></label><br>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="0" checked>
+                                                                        Any
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios3" value="3">
+                                                                        Local / Municipal
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios2" value="2">
+                                                                        Province / State
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="1">
+                                                                        National
+                                                        </label>
+                                                </div>
+                                        </div>
+                                </div>
 -->
 
-            <br>
-            <div class="form-group">
-                <button type="submit" class="btn btn-info btn-lg" id="updateButton">Submit query</button>
-            </div>
+                        <br>
+                        <div class="form-group">
+                                <button type="submit" class="btn btn-info btn-lg" id="updateButton">Submit query</button>
+                        </div>
+                        </div>
 
-            <br>
-            <div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorContainer">
-              <button type="button" class="close" onclick="$('.alert').hide(1000)" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <div id="errorText" style="font-size:11pt;"></div>
-            </div>
-
-
-        </form>
-    
-    </div>
-
-    </div>
-    
-    <div class="container-fluid">
-
-    <div id="numStudies"></div>
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th colspan=2 style='color:grey; text-align:center'>
-                    <h3><small>Outcomes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>measured <span class="glyphicon glyphicon-arrow-right"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h3></small>
-                </th>
-                <th colspan=2 style="font-size:11pt">
-                    Ability
-                    to hold
-                    government
-                    to account</th>
-                <th colspan=2 style="font-size:11pt">
-                    Effort
-                    to hold
-                    government
-                    to account
-                </th>
-                <th colspan=2 style="font-size:11pt">
-                    Government
-                    accountability</th>
-                <th colspan=2 style="font-size:11pt">
-                    Government
-                    performance
-                </th>
-            </tr>
-            <tr>
-                <th colspan=2 style='color:grey; text-align:center'>
-                    <h3><small>Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>provided&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-down"> &nbsp;&nbsp;&nbsp;&nbsp;</small></h3>
-                </th>
-                <th class="th_sub" id="know_monitor">
-                    Knowledge of how to 
-                    monitor agents
-                    <br>
-                </th>
-                <th class="th_sub" id="know_sanction">
-                    Knowledge of how to
-                    sanction agents
-                    <br>
-                </th>
-                <th class="th_sub" id="effort_to_monitor">
-                    Monitoring of agents
-                    <br>
-                </th>
-                <th class="th_sub" id="effort_to_sanction">
-                    Sanctioning of
-                    agents
-                    <br>
-                </th>
-                <th class="th_sub" id="provider_effort">
-                    Providers' level of effort
-                    <br>
-                </th>
-                <th class="th_sub" id="provider_corruption">
-                    Providers' level of corruption
-                    <br>
-                </th>
-                <th class="th_sub" id="outputs">
-                    Outputs
-                    <br>
-                </th>
-                <th class="th_sub" id="outcomes">
-                    Development outcomes
-                    <br>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr  id="aa_avenues_of_redress">
-<!--                 <th scope="row" rowspan=2 style="font-size:11pt">
-                    Ability to<br>
-                    monitor/<br>
-                    sanction
-                </th> -->
-                <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
-                    Accountability actors' avenues of redress
-                    <br>
-                </th>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-            </tr>
-            <tr  id="providers_duties">
-                <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
-                    Service providers' duties and obligations
-                    <br>
-                </th>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-            </tr>
-            <tr  id="aa_duties">
-
-                <th scope="row" colspan=2 style="font-size:11pt" class="th_sub">
-                    Accountability actors' civic duties
-                    <br>
-                </th>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-            </tr>
-            <tr  id="provider_inputs">
-<!--                 <th scope="row" rowspan=3 style="font-size:11pt">
-                    Costs of<br>
-                    monitoring/<br>
-                    sanctioning
-                </th> -->
-                <th scope="row" colspan=2  class="th_sub" style="font-size:11pt">
-                    Inputs available to service providers
-                    <br>
-                </th>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-            </tr>
-            <tr  id="provider_effortcorr">
-                <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
-                    Service providers' level of effort
-                    <br>
-                </th>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-            </tr>
-            <tr  id="provider_outputs">
-                <th scope="row" colspan=2 style="font-size:11pt" class="th_sub">
-                    Outputs/outcomes produced by providers
-                    <br>
-                </th>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-                <td>  </td>
-            </tr>
-
-        </tbody>
-    </table>
-
-    </div>
-    <br>
+<!--
+                        <div class="row">
+                                <div class="col col-4">
+                                        <div class="form-group">
+                                                <label><b>Who is the principal?</b></label><br>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios1" value="0" checked>
+                                                                Any
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="1">
+                                                                        Citizens
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="2">
+                                                                        Politicians
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="3">
+                                                                        Bureaucrats
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="4">
+                                                                        Judicial body
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="5">
+                                                                        Other
+                                                        </label>
+                                                </div>
+                                        </div>
+                                </div>
 
 
+                                <div class="col col-4">
+                                        <div class="form-group">
+                                                <label><b>Who are the agents?</b></label><br>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios1" value="0" checked>
+                                                                Any
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios2" value="1">
+                                                                        Citizens
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios3" value="2">
+                                                                        Politicians
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios4" value="3">
+                                                                        Bureaucrats
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios5" value="4">
+                                                                        Judicial body
+                                                        </label>
+                                                </div>
+                                                <div class="form-check">
+                                                        <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios6" value="5">
+                                                                        Other
+                                                        </label>
+                                                </div>
+                                        </div>
+                                </div>
 
-    <a href="data/GOVLAB_transparency_lit_review.csv" download="GOVLAB_transparency_lit_review.csv" class="btn btn-success btn-lg">
-      <span class="glyphicon glyphicon-download-alt"></span> 
-      Download all studies
-    </a>
+                        </div>
+-->
 
-    <hr>
-    <br>
 
-        <button class="btn btn-secondary btn-lg" data-toggle="collapse" data-target="#footnotes" id="showFormBtn">Footnotes &#x25BC;</button>
-    <br><br>
-    <div class="jumbotron collapse" id="footnotes" style="line-height: 1; font-size:11pt;">
+                        <br>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorContainer">
+                            <button type="button" class="close" onclick="$('.alert').hide(1000)" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div id="errorText" style="font-size:11pt;"></div>
+                        </div>
+
+
+                </form>
         
-        <div id="similaritySliderFootnoteTitle">
-            <h3><b><sup>1</sup>Contextual similarity measurement</b><br><br></h3>
-        </div>
-        <div id="similaritySliderFootnoteText">
-            Based on your selection of principal and agent, countries 
-            similar to the one you choose are identified using a number of different 
-            contextual factors including: <br><br>
-            <ol>    
-                <li>Level of economic development</li>
-                <li>Strength of rule of law</li>
-                <li>Regime type</li>
-                <li>Degree of corruption/clientelism</li>
-                <li>Degree of procedural democracy</li>
-                <li>Degree of civic space and protection for civil freedoms</li>
-                <li>Strength of civil society sector and social movements</li>
-                <li>Professionalization of bureaucracy/bureaucratic capacity</li>
-                <li>Social capital</li>
-                <li>Horizontal accountability institutions</li>
-            </ol>
-            Select a specific country as well as principal and agent in order to 
-            discover the specific contextual factors considered.
         </div>
 
+        </div>
+        
+        <div class="container-fluid">
+
+        <div id="numStudies"></div>
+
+        <table class="table table-bordered">
+                <thead>
+                        <tr>
+                                <th colspan=2 style='color:grey; text-align:center'>
+                                        <h3><small>What the &nbsp;<br> study measures <span class="glyphicon glyphicon-arrow-right"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h3></small>
+                                </th>
+                                <th colspan=2 style="font-size:11pt">
+                                        Ability
+                                        to hold
+                                        government
+                                        to account</th>
+                                <th colspan=2 style="font-size:11pt">
+                                        Effort
+                                        to hold
+                                        government
+                                        to account
+                                </th>
+                                <th colspan=2 style="font-size:11pt">
+                                        Government
+                                        accountability</th>
+                                <th colspan=2 style="font-size:11pt">
+                                        Government
+                                        performance
+                                </th>
+                        </tr>
+                        <tr>
+                                <th colspan=2 style='color:grey; text-align:center'>
+                                        <h3><small>Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>provided&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-down">&nbsp;&nbsp;&nbsp;</small></h3>
+                                </th>
+                                <th class="th_sub" id="know_monitor">
+                                        Knowledge of how to 
+                                        monitor government
+                                        <br>
+                                </th>
+                                <th class="th_sub" id="know_sanction">
+                                        Knowledge of how to
+                                        sanction government
+                                        <br>
+                                </th>
+                                <th class="th_sub" id="effort_to_monitor">
+                                        Monitoring of government
+                                        <br>
+                                </th>
+                                <th class="th_sub" id="effort_to_sanction">
+                                        Sanctioning of government
+                                        <br>
+                                </th>
+                                <th class="th_sub" id="provider_effort">
+                                        Government effort
+                                        <br>
+                                </th>
+                                <th class="th_sub" id="provider_corruption">
+                                        Government corruption
+                                        <br>
+                                </th>
+                                <th class="th_sub" id="outputs">
+                                        Government services
+                                        <br>
+                                </th>
+                                <th class="th_sub" id="outcomes">
+                                        Development outcomes
+                                        <br>
+                                </th>
+                        </tr>
+                </thead>
+                <tbody>
+                        <tr  id="aa_avenues_of_redress">
+<!--                 <th scope="row" rowspan=2 style="font-size:11pt">
+                                        Ability to<br>
+                                        monitor/<br>
+                                        sanction
+                                </th> -->
+                                <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
+                                        Redress mechanisms
+                                        <br>
+                                </th>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                        </tr>
+                        <tr  id="providers_duties">
+                                <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
+                                        Government duties and obligations
+                                        <br>
+                                </th>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                        </tr>
+                        <tr  id="aa_duties">
+
+                                <th scope="row" colspan=2 style="font-size:11pt" class="th_sub">
+                                        Civic duties and responsibilities
+                                        <br>
+                                </th>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                        </tr>
+                        <tr  id="provider_inputs">
+<!--                 <th scope="row" rowspan=3 style="font-size:11pt">
+                                        Costs of<br>
+                                        monitoring/<br>
+                                        sanctioning
+                                </th> -->
+                                <th scope="row" colspan=2  class="th_sub" style="font-size:11pt">
+                                        Government resources
+                                        <br>
+                                </th>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                        </tr>
+                        <tr  id="provider_effortcorr">
+                                <th scope="row" colspan=2 class="th_sub" style="font-size:11pt">
+                                        Government effort
+                                        <br>
+                                </th>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                        </tr>
+                        <tr  id="provider_outputs">
+                                <th scope="row" colspan=2 style="font-size:11pt" class="th_sub">
+                                        Government services
+                                        <br>
+                                </th>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                                <td>  </td>
+                        </tr>
+
+                </tbody>
+        </table>
+        <a href="data/GOVLAB_transparency_lit_review.csv" download="GOVLAB_transparency_lit_review.csv" class="btn btn-success btn-lg">
+            <span class="glyphicon glyphicon-download-alt"></span> 
+            Download all studies
+        </a>
+        <br>
+        <hr>
+            <span style='color:grey;'><i>Developed by Soubhik Barari <a href="https://soubhikbarari.github.io">(https//soubhikbarari.github.io).</a></i></span>
+        </div>
+        <br><br><br>
     </div>
-    <br><br>
 
-
-
-  </div>
 
 
 </body>
