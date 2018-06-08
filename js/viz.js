@@ -573,12 +573,12 @@ function updatePartialFilterNumStudiesDisplay(region, country, principal, agent)
 }
 
 function updateSimilaritySliderOuterDisplay(region, country, principal, agent) {
-    // update all the html around the similarity slider
-    // based on user inputs
+    // update all the html around the similarity slider based on user inputs
 
     if (country != "Any") {
         //// user is selecting a specific country
-        $("#similaritySliderBlock").show();
+        $("#similarityContent").show();
+        $("#similarityContentPlaceHolder").hide();
 
         if ((principal == "Any" && agent == "Any") || (principal == "Any" && agent == "Other") || (principal == "Other" && agent == "Any") || (principal == "Other" && agent == "Other")) {
             document.getElementById("sliderStatement").innerHTML = "most contextually comparable countries (with available studies) to <code>"+selected_country+"</code> overall";
@@ -595,11 +595,10 @@ function updateSimilaritySliderOuterDisplay(region, country, principal, agent) {
         //// update tooltip
         updateSimilaritySliderFootnote(country, principal, agent);
 
-
-
     } else {
         //// user is selecting a specific region
-        $("#similaritySliderBlock").hide();
+        $("#similarityContent").hide();
+        $("#similarityContentPlaceHolder").show();
     }
 }
 
