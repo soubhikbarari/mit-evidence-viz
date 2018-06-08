@@ -113,15 +113,14 @@
 
                 <form id="updateForm" onsubmit="return updateTable();">
             
-                        <h3 style="color:gray">Select context for your project:&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign" 
+                        <h3 style="color:gray">Select context for your project:&nbsp;<span class="glyphicon glyphicon-info-sign" 
                                                 style="font-size:10pt; color:grey;"
                                                 data-toggle="tooltip" 
                                                 data-placement="bottom"
                                                 data-html="true" 
                                                 data-title="<h5><br>Specify who will be acting to create change (<b>principal</b>) and whose behavior you want to change (<b>agent</b>). Additionally, choose either a geographic <b>region</b> <i>or</i> a specific <b>country</b> of interest.<br><br></h5>">
                                 </span>
-                                <button class="btn btn-secondary btn-sm" id="clearContext" onclick="clearContextFilters()">Clear
-                                </button>
+
                         </h3><br>
 
                         <div>
@@ -152,7 +151,7 @@
                                         <label><b>What levels of government are addressed?</b></label><br>
                                         <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="0" checked>
+                                                        <input type="checkbox" class="form-check-input" name="government_level" id="default_check" value="0" checked>
                                                                 Any
                                                 </label>
                                         </div>
@@ -206,8 +205,8 @@
                                 </h3>
 
                                 <br>
-                                <div style="color:gray" id="similarityContentPlaceHolder">
-                                    (Please select a country of interest first.)
+                                <div style="color:gray; font-size:11pt;" id="similarityContentPlaceHolder">
+                                    (First select a country of interest.)
                                 </div><br>
 
                                 <div id="similarityContent" class="collapse">
@@ -264,7 +263,7 @@
 
                                                 <div class="form-check">
                                                         <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="sector" id="optionsRadios1" value="0" checked>
+                                                                <input type="checkbox" class="form-check-input" name="sector" id="default_check" value="0" checked>
                                                                         Any
                                                         </label>
                                                 </div>
@@ -300,7 +299,7 @@
                                                 <label><b>Setting</b></label><br>
                                                 <div class="form-check">
                                                         <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="setting" id="optionsRadios1" value="0" checked>
+                                                                <input type="checkbox" class="form-check-input" name="setting" id="default_check" value="0" checked>
                                                                         Any
                                                         </label>
                                                 </div>
@@ -333,7 +332,7 @@
 
                                                 <div class="form-check">
                                                         <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="optionsRadios1" value="0" checked>
+                                                                <input type="checkbox" class="form-check-input" name="delivery_mode" id="default_check" value="0" checked>
                                                                         Any
                                                         </label>
                                                 </div>
@@ -376,7 +375,7 @@
                                                 <label><b>Research methodology</b></label><br>
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" name="methodology" id="optionsRadios1" value="0" checked>
+                                                        <input type="checkbox" class="form-check-input" name="methodology" id="default_check" value="0" checked>
                                                                 Any
                                                     </label>
                                                 </div>
@@ -429,140 +428,18 @@
                                                         </label>
                                                 </div>
                                         </div>
-</div>
+                                </div>
                         </div>
 
-
-
-
-<!--
-                                <div class="col col-4">
-                                        <div class="form-group" style="font-size:11pt;">
-                                                <label><b>What level of government is addressed?</b></label><br>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="0" checked>
-                                                                        Any
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios3" value="3">
-                                                                        Local / Municipal
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios2" value="2">
-                                                                        Province / State
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="government_level" id="optionsRadios1" value="1">
-                                                                        National
-                                                        </label>
-                                                </div>
-                                        </div>
-                                </div>
--->
 
                         <br>
                         <div class="form-group">
-                                <button type="submit" class="btn btn-info btn-lg" id="updateButton">Submit query</button>
+                            <button class="btn btn-info btn-lg" id="clearContext" onclick="clearAll()">Reset form</button>
+                            <button type="submit" class="btn btn-info btn-lg" id="updateButton">Submit query</button>
                         </div>
-                        </div>
 
-<!--
-                        <div class="row">
-                                <div class="col col-4">
-                                        <div class="form-group">
-                                                <label><b>Who is the principal?</b></label><br>
-                                                <div class="form-check">
-                                                    <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios1" value="0" checked>
-                                                                Any
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="1">
-                                                                        Citizens
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="2">
-                                                                        Politicians
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="3">
-                                                                        Bureaucrats
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="4">
-                                                                        Judicial body
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="principal" id="optionsRadios2" value="5">
-                                                                        Other
-                                                        </label>
-                                                </div>
-                                        </div>
-                                </div>
-
-
-                                <div class="col col-4">
-                                        <div class="form-group">
-                                                <label><b>Who are the agents?</b></label><br>
-                                                <div class="form-check">
-                                                    <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios1" value="0" checked>
-                                                                Any
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios2" value="1">
-                                                                        Citizens
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios3" value="2">
-                                                                        Politicians
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios4" value="3">
-                                                                        Bureaucrats
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios5" value="4">
-                                                                        Judicial body
-                                                        </label>
-                                                </div>
-                                                <div class="form-check">
-                                                        <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" name="agent" id="optionsRadios6" value="5">
-                                                                        Other
-                                                        </label>
-                                                </div>
-                                        </div>
-                                </div>
 
                         </div>
--->
-
 
                         <br>
                         <div class="alert alert-warning alert-dismissible fade show" role="alert" id="errorContainer">

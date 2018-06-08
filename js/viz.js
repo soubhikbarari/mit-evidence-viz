@@ -481,11 +481,23 @@ function onSimilarCountrySlidersUpdates() {
 function clearContextFilters() {
 
     document.getElementById("country").value   = "Any";
-    // document.getElementById("region").value    = "Any";
     document.getElementById("principal").value = "Any";
     document.getElementById("agent").value     = "Any";
     updatePartialFilterNumStudiesDisplay("Any", "Any", "Any", "Any");
     updateSimilaritySliderOuterDisplay("Any", "Any", "Any", "Any");
+
+}
+
+function clearAll() {
+
+    document.getElementById("country").value   = "Any";
+    document.getElementById("principal").value = "Any";
+    document.getElementById("agent").value     = "Any";
+    updatePartialFilterNumStudiesDisplay("Any", "Any", "Any", "Any");
+    updateSimilaritySliderOuterDisplay("Any", "Any", "Any", "Any");
+
+    $('input[type=checkbox]').prop('checked', false);
+    $('input[id=default_check]').prop('checked', true);
 
 }
 
