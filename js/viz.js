@@ -15,6 +15,7 @@ var CURR_REGION_SEL    = null;
 var PARTIAL_STUDY_COUNT = null;
 
 // keep track of additional countries to filter
+// (from the "expand your search" option)
 var ADDTNL_COUNTRY = [];
 
 // keep track of available data
@@ -301,9 +302,9 @@ function initTable(){
         // console.log(uniq_studies);
 
         if (N == 1) {
-            d3.select("#numStudies").html("<h4><b>" + N + "</b> total study (click on a circle to download a report of the papers and summaries):</h4>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> total study (<b>click</b> on a circle to download PDF summary of corresponding studies):</h4>");  
         } else {
-            d3.select("#numStudies").html("<h4><b>" + N + "</b> total studies (click on a circle to download a report of the papers and summaries):</h4>");  
+            d3.select("#numStudies").html("<h4><b>" + N + "</b> total studies (<b>click</b> on a circle to download PDF summary of corresponding studies):</h4>");  
         }
     });
 
@@ -495,10 +496,8 @@ function clearAll() {
     document.getElementById("agent").value     = "Any";
     updatePartialFilterNumStudiesDisplay("Any", "Any", "Any", "Any");
     updateSimilaritySliderOuterDisplay("Any", "Any", "Any", "Any");
-
     $('input[type=checkbox]').prop('checked', false);
     $('input[id=default_check]').prop('checked', true);
-
 }
 
 
@@ -515,8 +514,7 @@ function updatePartialFilterNumStudiesDisplay(region, country, principal, agent)
 
             if (
                     (
-                        d["country"] == country 
-                        // || d["region"] == region
+                        d["country"] == country || country == "Any"
                     ) 
                     & 
                     ( // study matches users' desired principal
@@ -842,7 +840,6 @@ function updateTable() {
         //// no studies found based on partial filters
         error_text += "- No studies can be found for context. Please specify a different context.<br>"
     }
-
 
     if (error_text.length > 0) {
         d3.select("#errorText").html(error_text);
