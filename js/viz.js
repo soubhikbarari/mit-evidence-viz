@@ -835,8 +835,8 @@ function updateTable() {
     // CURR_REGION_SEL = document.getElementById("region").value;
 
     if ( ADDTNL_COUNTRY.length == 0 && AVLBL_COUNTRY.indexOf(CURR_COUNTRY_SEL) == -1 && CURR_COUNTRY_SEL != "Any" ) {
-        error_text += "- Context is missing information. Please select at least one <strong>country</strong> with available studies or a specific <strong>region</strong>.<br>";
-    } else if ( PARTIAL_STUDY_COUNT != null && PARTIAL_STUDY_COUNT == 0 && ADDTNL_COUNTRY.length == 0 ) {
+        error_text += "- Context is missing information. Please select at least one <strong>country</strong> with available studies.<br>";
+    } else if ( CURR_COUNTRY_SEL != "Any" && PARTIAL_STUDY_COUNT != null && PARTIAL_STUDY_COUNT == 0 && ADDTNL_COUNTRY.length == 0 ) {
         //// no studies found based on partial filters
         error_text += "- No studies can be found for context. Please specify a different context.<br>"
     }
